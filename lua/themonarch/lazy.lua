@@ -22,7 +22,6 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
 require("lazy").setup({
-	"folke/tokyonight.nvim",
 	-- "nvim-lua/plenary.nvim",
 	-- "nvim-telescope/telescpe.nvim",
 	spec = {
