@@ -43,3 +43,7 @@ require("lazy").setup({
 		notify = false,
 	}, -- automatically check for plugins update
 })
+
+-- trigger custom event after all the the plugins are initialized
+-- custom event for vscode-neovim
+vim.cmd("doautocmd User VscodeNeovimKeyMaps")
