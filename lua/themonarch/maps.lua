@@ -4,7 +4,7 @@ local function map(mode, lhs, rhs)
 	vim.keymap.set(mode, lhs, rhs, { silent = true })
 end
 
---exit insert mode you can enalbe it if you want here i comment it out cause i prefer to map the esc key to CapsLook key using powertoy
+--exit insert mode you can enable it if you want here i comment it out cuz i prefer to map the esc key to CapsLook key using powertoy
 -- map("n", "jk", "<ESC>")
 --
 
@@ -21,17 +21,15 @@ map("v", ">", ">gv")
 
 -- Do things without affecting the registers
 map("n", "x", '"_x')
-map("n", "<leader>p", '"_dp')
-map("n", "<leader>p", '"_dP')
-map("v", "<leader>p", '"_dp')
-map("n", "<Leader>c", '"_c')
-map("n", "<Leader>C", '"_C')
-map("v", "<Leader>c", '"_c')
-map("v", "<Leader>C", '"_C')
-map("n", "<Leader>d", '"_d')
-map("n", "<Leader>D", '"_D')
-map("v", "<Leader>d", '"_d')
-map("v", "<Leader>D", '"_D')
+map("v", "<leader>p", '"_dP')
+map("n", "<leader>c", '"_c')
+map("v", "<leader>c", '"_c')
+map("v", "<leader>C", '"_C')
+map("n", "<leader>d", '"_d')
+map("n", "<leader>C", '"_C')
+map("n", "<leader>D", '"_D')
+map("v", "<leader>d", '"_d')
+map("v", "<leader>D", '"_D')
 
 -- select all
 map("n", "<C-a>", "gg<S-v>G")
