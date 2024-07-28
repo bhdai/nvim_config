@@ -48,6 +48,8 @@ return {
 	},
 	{
 		"nvim-treesitter/nvim-treesitter",
-		opts = { highlight = { enable = false } },
+		opts = {
+			highlight = { enable = false },
+		},
 	},
 }
