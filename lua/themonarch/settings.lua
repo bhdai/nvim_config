@@ -15,6 +15,7 @@ opt.cursorline = true
 opt.expandtab = true -- in insert mode use the propreate number of spaces to insert a <tab>
 opt.shiftwidth = 2 -- number of spaces used for autoindent
 opt.tabstop = 2 -- number of spaces that tab in the a file count for
+opt.updatetime = 250
 opt.encoding = "UTF-8"
 opt.ruler = true -- show the line and column number of cursur position
 opt.mouse = "a" -- using mouse for a(all) mode
