@@ -9,11 +9,18 @@ return {
 	},
 	{
 		"folke/tokyonight.nvim",
-		lazy = false, -- set it to false to make sure it load during startup if it is your main theme
+		lazy = true, -- set it to false to make sure it load during startup if it is your main theme
 		priority = 1000,
 		config = function()
 			vim.cmd([[colorscheme tokyonight]])
 		end,
+		opts = {
+			transparent = true,
+			styles = {
+				sidebars = "transparent",
+				floats = "transparent",
+			},
+		},
 	},
 	{
 		"catppuccin/nvim",
@@ -33,5 +40,19 @@ return {
 		config = function()
 			vim.cmd.colorscheme("catppuccin")
 		end,
+	},
+	{
+		"scottmckendry/cyberdream.nvim",
+		lazy = false,
+		priority = 1000,
+		config = function()
+			vim.cmd.colorscheme("cyberdream")
+		end,
+		opts = {
+			transparent = true,
+			borderless_telescope = true,
+			terminal_colors = true,
+			cache = true,
+		},
 	},
 }

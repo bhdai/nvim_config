@@ -8,7 +8,8 @@ end
 local in_vscode = vim.g.vscode ~= nil
 
 if not in_vscode then
-	-- this only run only NOT in Vscode
+	-- this only run if you're  NOT in Vscode
+	map("n", "<leader>ds", vim.diagnostic.setloclist, "lsp diagnostic loclist")
 
 	-- windows navigation
 	map("n", "<C-h>", "<C-w>h")
@@ -29,6 +30,9 @@ if not in_vscode then
 	-- neo_tree
 	map("n", "<leader>e", ":Neotree toggle<CR>")
 	map("n", "<leader>r", ":Neotree focus<CR>")
+
+	-- Add a custom keybinding to toggle the colorscheme
+	vim.api.nvim_set_keymap("n", "<leader>tt", ":CyberdreamToggleMode<CR>", { noremap = true, silent = true })
 else
 	-- this will run if you ARE in Vscode
 end
