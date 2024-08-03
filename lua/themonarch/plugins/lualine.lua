@@ -1,64 +1,172 @@
-local colors = {
-	blue = "#80a0ff",
-	cyan = "#79dac8",
-	black = "#080808",
-	white = "#c6c6c6",
-	red = "#ff5189",
-	violet = "#d183e8",
-	grey = "#303030",
-}
-
-local bubbles_theme = {
-	normal = {
-		a = { fg = colors.black, bg = colors.violet },
-		b = { fg = colors.white, bg = colors.grey },
-		c = { fg = colors.white },
-	},
-
-	insert = { a = { fg = colors.black, bg = colors.blue } },
-	visual = { a = { fg = colors.black, bg = colors.cyan } },
-	replace = { a = { fg = colors.black, bg = colors.red } },
-
-	inactive = {
-		a = { fg = colors.white, bg = colors.black },
-		b = { fg = colors.white, bg = colors.black },
-		c = { fg = colors.white },
-	},
-}
-
 return {
 	"nvim-lualine/lualine.nvim",
-	dependencies = { "nvim-tree/nvim-web-devicons" },
-	config = function()
-		require("lualine").setup({
+	event = "VeryLazy",
+	dependencies = { "echasnovski/mini.icons" },
+	opts = function()
+		local utils = require("themonarch.utils")
+		local copilot_colors = {
+			[""] = utils.get_hlgroup("Comment"),
+			["Normal"] = utils.get_hlgroup("Comment"),
+			["Warning"] = utils.get_hlgroup("DiagnosticError"),
+			["InProgress"] = utils.get_hlgroup("DiagnosticWarn"),
+		}
+
+		local filetype_map = {
+			lazy = { name = "lazy.nvim", icon = "💤" },
+			minifiles = { name = "minifiles", icon = "🗂️ " },
+			toggleterm = { name = "terminal", icon = "🐚" },
+			mason = { name = "mason", icon = "🔨" },
+			TelescopePrompt = { name = "telescope", icon = "🔍" },
+			["copilot-chat"] = { name = "copilot", icon = "🤖" },
+		}
+
+		return {
 			options = {
-				icons_enable = true,
-				theme = bubbles_theme,
-				component_separators = "",
-				section_separators = { left = "", right = "" },
+				component_separators = { left = " ", right = " " },
+				section_separators = { left = " ", right = " " },
+				theme = "auto",
+				globalstatus = true,
+				disabled_filetypes = { statusline = { "dashboard", "alpha" } },
 			},
 			sections = {
-				lualine_a = { { "mode", separator = { left = "" }, right_padding = 2 } },
-				lualine_b = { "filename", "branch", "location" },
+				lualine_a = {
+					{
+						"mode",
+						icon = "",
+						fmt = function(mode)
+							return mode:lower()
+						end,
+					},
+				},
+				lualine_b = { { "branch", icon = "" } },
 				lualine_c = {
-					"%=", --{ 'hostname' }, -- this will display in the center
+					{
+						"diagnostics",
+						symbols = {
+							error = " ",
+							warn = " ",
+							info = " ",
+							hint = "󰝶 ",
+						},
+					},
+					{
+						function()
+							local devicons = require("nvim-web-devicons")
+							local ft = vim.bo.filetype
+							local icon
+							if filetype_map[ft] then
+								return " " .. filetype_map[ft].icon
+							end
+							if icon == nil then
+								icon = devicons.get_icon(vim.fn.expand("%:t"))
+							end
+							if icon == nil then
+								icon = devicons.get_icon_by_filetype(ft)
+							end
+							if icon == nil then
+								icon = " 󰈤"
+							end
+
+							return icon .. " "
+						end,
+						color = function()
+							local _, hl = require("nvim-web-devicons").get_icon(vim.fn.expand("%:t"))
+							if hl then
+								return hl
+							end
+							return utils.get_hlgroup("Normal")
+						end,
+						separator = "",
+						padding = { left = 0, right = 0 },
+					},
+					{
+						"filename",
+						padding = { left = 0, right = 0 },
+						fmt = function(name)
+							if filetype_map[vim.bo.filetype] then
+								return filetype_map[vim.bo.filetype].name
+							else
+								return name
+							end
+						end,
+					},
+					{
+						function()
+							local buffer_count = require("themonarch.utils").get_buffer_count()
+
+							return "+" .. buffer_count - 1 .. " "
+						end,
+						cond = function()
+							return require("themonarch.utils").get_buffer_count() > 1
+						end,
+						color = utils.get_hlgroup("Operator", nil),
+						padding = { left = 0, right = 1 },
+					},
+					{
+						function()
+							local tab_count = vim.fn.tabpagenr("$")
+							if tab_count > 1 then
+								return vim.fn.tabpagenr() .. " of " .. tab_count
+							end
+						end,
+						cond = function()
+							return vim.fn.tabpagenr("$") > 1
+						end,
+						icon = "󰓩",
+						color = utils.get_hlgroup("Special", nil),
+					},
+					{
+						function()
+							return require("nvim-navic").get_location()
+						end,
+						cond = function()
+							return package.loaded["nvim-navic"] and require("nvim-navic").is_available()
+						end,
+						color = utils.get_hlgroup("Comment", nil),
+					},
 				},
-				lualine_x = {},
-				lualine_y = { "encoding", "fileformat", "filetype", "progress" },
+				lualine_x = {
+					{
+						require("lazy.status").updates,
+						cond = require("lazy.status").has_updates,
+						color = utils.get_hlgroup("String"),
+					},
+					{
+						function()
+							local icon = " "
+							local status = require("copilot.api").status.data
+							return icon .. (status.message or "")
+						end,
+						cond = function()
+							local ok, clients = pcall(vim.lsp.get_clients, { name = "copilot", bufnr = 0 })
+							return ok and #clients > 0
+						end,
+						color = function()
+							if not package.loaded["copilot"] then
+								return
+							end
+							local status = require("copilot.api").status.data
+							return copilot_colors[status.status] or copilot_colors[""]
+						end,
+					},
+					{ "diff" },
+				},
+				lualine_y = {
+					{
+						"progress",
+					},
+					{
+						"location",
+						color = utils.get_hlgroup("Boolean"),
+					},
+				},
 				lualine_z = {
-					{ "location", separator = { right = "" }, left_padding = 2 },
+					{
+						"datetime",
+						style = "  %X",
+					},
 				},
 			},
-			inactive_sections = {
-				lualine_a = { "filename" },
-				lualine_b = {},
-				lualine_c = {},
-				lualine_x = {},
-				lualine_y = {},
-				lualine_z = { "location" },
-			},
-			tabline = {},
-			extensions = {},
-		})
+		}
 	end,
 }

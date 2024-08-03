@@ -36,11 +36,13 @@ require("lazy").setup({
 		version = false, -- always use the latest git commit
 		-- version = "*", -- try installing the latest stable version for plugins that support semver
 	},
-	install = { colorscheme = { "tokyonight", "habamax" } },
-	checker = {
-		enalbe = true,
-		notify = false,
-	}, -- automatically check for plugins update
+	install = { colorscheme = { "cyberdream" } },
+	checker = { enalbe = true, notify = false }, -- automatically check for plugins update
+	ui = {
+		title = " lazy.nvim 💤",
+		border = "rounded",
+		pills = false,
+	},
 })
 
 -- trigger custom event after all the the plugins are initialized

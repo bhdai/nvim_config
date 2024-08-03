@@ -16,6 +16,7 @@ opt.expandtab = true -- in insert mode use the propreate number of spaces to ins
 opt.shiftwidth = 2 -- number of spaces used for autoindent
 opt.tabstop = 2 -- number of spaces that tab in the a file count for
 opt.updatetime = 250
+opt.wrap = false -- disable auto wrap line if you can enable this using :set wrap if you want otherwise turn this to true
 opt.encoding = "UTF-8"
 opt.ruler = true -- show the line and column number of cursur position
 opt.mouse = "a" -- using mouse for a(all) mode
