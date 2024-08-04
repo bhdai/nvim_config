@@ -1,10 +1,10 @@
-<img src="./imgs/nvim1png.png">
+<img src="./imgs/nvim1.png">
 
-<img src="./imgs/nvim2png.png">
+<img src="./imgs/nvim2.png">
 
-<img src="./imgs/nvim3png.png">
+<img src="./imgs/nvim3.png">
 
-<img src="./imgs/nvim4png.png">
+<img src="./imgs/nvim4.png">
 
 ## This is my config for neovim
 
