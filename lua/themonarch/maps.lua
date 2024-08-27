@@ -11,6 +11,13 @@ if not in_vscode then
 	-- this only run if you're  NOT in Vscode
 	map("n", "<leader>ds", vim.diagnostic.setloclist, "lsp diagnostic loclist")
 
+	map("i", "<C-b>", "<ESC>^i", "move beginning of line")
+	map("i", "<C-e>", "<End>", "move end of line")
+	map("i", "<C-h>", "<Left>", "move left")
+	map("i", "<C-l>", "<Right>", "move right")
+	map("i", "<C-j>", "<Down>", "move down")
+	map("i", "<C-k>", "<Up>", "move up")
+
 	-- windows navigation
 	map("n", "<C-h>", "<C-w>h")
 	map("n", "<C-j>", "<C-w>j")
@@ -42,12 +49,6 @@ end
 --exit insert mode you can enable it if you want here i comment it out cuz i prefer to map the esc key to CapsLook key using powertoy
 -- map("n", "jk", "<ESC>")
 --
-map("i", "<C-b>", "<ESC>^i", "move beginning of line")
-map("i", "<C-e>", "<End>", "move end of line")
-map("i", "<C-h>", "<Left>", "move left")
-map("i", "<C-l>", "<Right>", "move right")
-map("i", "<C-j>", "<Down>", "move down")
-map("i", "<C-k>", "<Up>", "move up")
 
 map("n", "dw", 'vb"_d')
 -- clean search with <esc>
