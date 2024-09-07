@@ -26,6 +26,7 @@ require("lazy").setup({
 	-- "nvim-telescope/telescpe.nvim",
 	spec = {
 		{ import = "themonarch.plugins" },
+		{ "wakatime/vim-wakatime", lazy = false },
 	},
 	defaults = {
 		-- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
