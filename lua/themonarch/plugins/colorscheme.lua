@@ -9,7 +9,7 @@ return {
 	},
 	{
 		"folke/tokyonight.nvim",
-		lazy = true, -- set it to false to make sure it load during startup if it is your main theme
+		lazy = false, -- set it to false to make sure it load during startup if it is your main theme
 		priority = 1000,
 		config = function()
 			require("tokyonight").setup({
@@ -19,7 +19,7 @@ return {
 					floats = "transparent",
 				},
 			})
-			vim.cmd.colorscheme("tokyonight")
+			vim.cmd.colorscheme("tokyonight-storm")
 		end,
 	},
 	{
@@ -43,7 +43,7 @@ return {
 	},
 	{
 		"scottmckendry/cyberdream.nvim",
-		lazy = false,
+		lazy = true,
 		priority = 1000,
 		config = function()
 			require("cyberdream").setup({
