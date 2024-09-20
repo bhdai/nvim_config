@@ -35,7 +35,6 @@ if not in_vscode then
 	map("n", "<C-Down>", "<C-w>-")
 
 	-- neo_tree
-	map("n", "<leader>e", ":Neotree toggle<CR>")
 	map("n", "<leader>r", ":Neotree focus<CR>")
 
 	-- Add a custom keybinding to toggle the colorscheme
