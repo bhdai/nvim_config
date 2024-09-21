@@ -37,7 +37,7 @@ require("lazy").setup({
 		version = false, -- always use the latest git commit
 		-- version = "*", -- try installing the latest stable version for plugins that support semver
 	},
-	install = { colorscheme = { "cyberdream" } },
+	install = { colorscheme = { "tokyonight", "habamax" } },
 	checker = { enalbe = true, notify = false }, -- automatically check for plugins update
 	ui = {
 		title = " lazy.nvim 💤",
