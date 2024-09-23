@@ -11,6 +11,9 @@ if not in_vscode then
 	-- this only run if you're NOT in Vscode
 	map("n", "<leader>ds", vim.diagnostic.setloclist, "lsp diagnostic loclist")
 
+	-- lazy
+	map("n", "<leader>l", ":Lazy<CR>")
+
 	map("i", "<C-b>", "<ESC>^i", "move beginning of line")
 	map("i", "<C-e>", "<End>", "move end of line")
 	map("i", "<C-h>", "<Left>", "move left")
@@ -37,6 +40,17 @@ if not in_vscode then
 	-- neo_tree
 	map("n", "<leader>r", ":Neotree focus<CR>")
 
+	-- enalbe/disable render-markdown
+	map("n", "<leader>um", ":RenderMarkdown toggle<CR>")
+
+	map("n", "]t", function()
+		require("todo-comments").jump_next()
+	end, "Next todo comment")
+
+	map("n", "[t", function()
+		require("todo-comments").jump_prev()
+	end, "Previous todo comment")
+
 	-- Add a custom keybinding to toggle the colorscheme
 	vim.api.nvim_set_keymap("n", "<leader>tt", ":CyberdreamToggleMode<CR>", { noremap = true, silent = true })
 else
@@ -47,7 +61,12 @@ end
 
 --exit insert mode you can enable it if you want here i comment it out cuz i prefer to map the esc key to CapsLook key using powertoy
 -- map("n", "jk", "<ESC>")
---
+
+-- better up and down
+map("n", "j", "gj")
+map("n", "k", "gk")
+map("v", "j", "gj")
+map("v", "k", "gk")
 
 map("n", "dw", 'vb"_d')
 -- clean search with <esc>

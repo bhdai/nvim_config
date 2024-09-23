@@ -1,4 +1,3 @@
-local global = vim.g
 local opt = vim.opt
 
 -- editor options
@@ -29,12 +28,5 @@ opt.inccommand = "split" -- When nonempty, shows the effects of :substitute, :sm
 opt.splitright = true
 opt.splitbelow = true
 opt.termguicolors = true
-opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Lower than default (1000) to quickly trigger which-key
+-- opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Lower than default (1000) to quickly trigger which-key
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
-
-if vim.fn.has("nvim-0.10") == 1 then
-	opt.smoothscroll = true
-	-- opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
-	-- opt.foldmethod = "expr"
-	-- opt.foldtext = ""
-end
