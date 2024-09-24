@@ -8,15 +8,15 @@ return {
 				sign = false,
 				position = "right",
 				width = "block",
-				right_pad = 1,
+				right_pad = 2,
+				left_pad = 2,
 			},
-			latex = { enalbe = true },
+			latex = { enabled = true },
 			heading = {
 				sign = false,
 				icons = {},
 			},
 		},
-		ft = { "markdown", "norg", "rmd", "org" },
 	},
 	{
 		"iamcco/markdown-preview.nvim",
