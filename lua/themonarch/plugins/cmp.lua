@@ -1,52 +1,116 @@
 return {
 	"hrsh7th/nvim-cmp",
+	version = false,
 	event = "InsertEnter",
 	dependencies = {
-		"hrsh7th/cmp-buffer", -- source for text in buffer
-		"hrsh7th/cmp-path", -- source for file system paths
-		{
-			"L3MON4D3/LuaSnip",
-			version = "v2.*",
-			-- install jsregexp (optional!).
-			build = "make install_jsregexp",
-		},
+		"hrsh7th/cmp-buffer",
+		"hrsh7th/cmp-path",
+		"hrsh7th/cmp-cmdline",
+		"L3MON4D3/LuaSnip",
+		"saadparwaiz1/cmp_luasnip",
 		"rafamadriz/friendly-snippets",
-		"onsails/lspkind.nvim", -- vs-code like pictograms
+		"onsails/lspkind.nvim",
 	},
 	config = function()
 		local cmp = require("cmp")
-		local lspkind = require("lspkind")
 		local luasnip = require("luasnip")
+		local lspkind = require("lspkind")
+		local max_items = 5
 
+		-- loads vscode style snippets from installed plugins (e.g. friendly-snippets)
 		require("luasnip.loaders.from_vscode").lazy_load()
 
 		cmp.setup({
+			window = {
+				completion = {
+					---@diagnostic disable: assign-type-mismatch
+					border = {
+						{ "󱐋", "WarningMsg" },
+						{ "─", "Comment" },
+						{ "╮", "Comment" },
+						{ "│", "Comment" },
+						{ "╯", "Comment" },
+						{ "─", "Comment" },
+						{ "╰", "Comment" },
+						{ "│", "Comment" },
+					},
+					scrollbar = false,
+				},
+				documentation = {
+					border = {
+						{ "", "DiagnosticHint" },
+						{ "─", "Comment" },
+						{ "╮", "Comment" },
+						{ "│", "Comment" },
+						{ "╯", "Comment" },
+						{ "─", "Comment" },
+						{ "╰", "Comment" },
+						{ "│", "Comment" },
+					},
+					---@diagnostic enable: assign-type-mismatch
+					scrollbar = false,
+				},
+			},
+
+			completion = {
+				completeopt = "menu,menuone,preview,noinsert",
+			},
+
 			snippet = {
 				expand = function(args)
-					luasnip.lsp_expand(args.body)
+					vim.snippet.expand(args.body)
 				end,
 			},
-			mapping = cmp.mapping.preset.insert({
-				["<C-d>"] = cmp.mapping.scroll_docs(-4),
-				["<C-f>"] = cmp.mapping.scroll_docs(4),
-				["<C-Space>"] = cmp.mapping.complete(),
-				["<C-e>"] = cmp.mapping.close(),
-				["<CR>"] = cmp.mapping.confirm({
-					behavior = cmp.ConfirmBehavior.Replace,
-					select = true,
-				}),
-			}),
+
+			mapping = {
+				["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+				["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+				["<C-y>"] = cmp.mapping(
+					cmp.mapping.confirm({
+						behavior = cmp.ConfirmBehavior.Insert,
+						select = true,
+					}),
+					{ "i", "c" }
+				),
+			},
+
 			sources = cmp.config.sources({
-				{ name = "nvim_lsp" },
-				{ name = "luasnip" },
-				{ name = "buffer" },
-				{ name = "path" },
+				{ name = "nvim_lsp", max_item_count = max_items },
+				{ name = "luasnip", max_item_count = max_items },
+				{ name = "buffer", max_item_count = max_items },
+				{ name = "path", max_item_count = max_items },
+				{ name = "lazydev", max_item_count = max_items, group_index = 0 },
+			}),
+
+			-- configure lspkind for vs-code like pictograms in completion menu
+			formatting = {
+				format = lspkind.cmp_format({
+					maxwidth = 50,
+					ellipsis_char = "...",
+				}),
+			},
+		})
+
+		cmp.setup.cmdline({ "/", "?" }, {
+			mapping = cmp.mapping.preset.cmdline(),
+			sources = {
+				{ name = "buffer", max_item_count = max_items },
+			},
+		})
+
+		cmp.setup.cmdline(":", {
+			mapping = cmp.mapping.preset.cmdline(),
+			sources = cmp.config.sources({
+				{ name = "path", max_item_count = max_items },
+			}, {
+				{ name = "cmdline", max_item_count = max_items },
 			}),
 		})
 
-		vim.cmd([[
-          set completeopt=menuone,noinsert,noselect
-          highlight! default link CmpItemKind CmpItemMenuDefault
-        ]])
+		vim.keymap.set({ "i", "s" }, "<C-k>", function()
+			if luasnip.expand_or_jumpable() then
+				luasnip.expand_or_jump()
+			end
+		end, { silent = true })
 	end,
 }

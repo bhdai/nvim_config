@@ -3,8 +3,8 @@ return {
 		"echasnovski/mini.indentscope",
 		version = false, -- wait till new 0.7.0 release to put it back on semver
 		opts = {
-			-- symbol = "│",
-			symbol = "▏",
+			symbol = "│",
+			-- symbol = "▏",
 			options = { try_as_border = true },
 		},
 		init = function()
@@ -36,6 +36,7 @@ return {
 		---@type ibl.config
 		opts = {
 			scope = { enabled = false },
+			indent = { char = "│" },
 		},
 	},
 	{

@@ -12,7 +12,7 @@ if not in_vscode then
 	map("n", "<leader>ds", vim.diagnostic.setloclist, "lsp diagnostic loclist")
 
 	-- lazy
-	map("n", "<leader>l", ":Lazy<CR>")
+	map("n", "<leader>l", ":Lazy<CR>", "toggle lazy.nvim buffer")
 
 	map("i", "<C-b>", "<ESC>^i", "move beginning of line")
 	map("i", "<C-e>", "<End>", "move end of line")
@@ -28,8 +28,9 @@ if not in_vscode then
 	map("n", "<C-l>", "<C-w>l")
 
 	-- new windows
-	map("n", "sv", ":vsplit<CR>")
-	map("n", "ss", ":split<CR>")
+	map("n", "<leader>-", "<C-W>s", "Split window below")
+	map("n", "<leader>|", "<C-W>v", "Split window right")
+	map("n", "<leader>wd", "<C-W>c", "delete window")
 
 	-- resize windows
 	map("n", "<C-Left>", "<C-w><")
@@ -50,9 +51,6 @@ if not in_vscode then
 	map("n", "[t", function()
 		require("todo-comments").jump_prev()
 	end, "Previous todo comment")
-
-	-- Add a custom keybinding to toggle the colorscheme
-	vim.api.nvim_set_keymap("n", "<leader>tt", ":CyberdreamToggleMode<CR>", { noremap = true, silent = true })
 else
 	-- this will run if you ARE in Vscode
 end
@@ -82,12 +80,12 @@ map("v", ">", ">gv")
 
 -- Do things without affecting the registers
 map("n", "x", '"_x')
-map("v", "<leader>p", '"_dP')
-map("n", "<leader>c", '"_c')
-map("v", "<leader>c", '"_c')
-map("v", "<leader>C", '"_C')
+map("n", "c", '"_c')
+map("v", "c", '"_c')
+map("v", "C", '"_C')
+map("n", "C", '"_C')
+map("v", "p", '"_dP')
 map("n", "<leader>d", '"_d')
-map("n", "<leader>C", '"_C')
 map("n", "<leader>D", '"_D')
 map("v", "<leader>d", '"_d')
 map("v", "<leader>D", '"_D')
