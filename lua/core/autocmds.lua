@@ -57,15 +57,3 @@ autocmd("FileType", {
 		})
 	end,
 })
-
--- IndentBlankline Settings
-local indent_blankline_group = augroup("IndentBlankline Settings", { clear = true })
-
-autocmd("FileType", {
-	pattern = "dashboard",
-	callback = function()
-		vim.cmd("IBLDisable")
-	end,
-	group = indent_blankline_group,
-	desc = "Disable indent-blankline in dashboard buffer",
-})

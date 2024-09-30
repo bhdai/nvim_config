@@ -38,6 +38,15 @@ if not in_vscode then
 	map("n", "<C-Up>", "<C-w>+")
 	map("n", "<C-Down>", "<C-w>-")
 
+	-- Telescope
+	map("n", "<leader>ff", ":Telescope find_files<cr>", "Fuzzy find files")
+	map("n", "<leader>fr", ":Telescope oldfiles<cr>", "Find string in CWD")
+	map("n", "<leader>fc", ":Telescope grep_string<cr>", "Find string under cursor in CWD")
+	map("n", "<leader>fb", ":Telescope buffers<cr>", "Fuzzy find buffers")
+	map("n", "<leader>ft", ":Telescope<cr>", "Other pickers...")
+	map("n", "<leader>fS", ":Telescope resession<cr>", "Find Session")
+	map("n", "<leader>fh", ":Telescope help_tags<cr>", "Find help tags")
+
 	-- neo_tree
 	map("n", "<leader>r", ":Neotree focus<CR>")
 

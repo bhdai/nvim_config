@@ -4,6 +4,9 @@ return {
 		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
 		opts = {
 			file_types = { "markdown", "norg", "rmd", "org" },
+			pipe_table = {
+				border = { "╭", "┬", "╮", "├", "┼", "┤", "╰", "┴", "╯", "│", "─" },
+			},
 			code = {
 				sign = false,
 				position = "right",
@@ -12,6 +15,9 @@ return {
 				left_pad = 2,
 			},
 			latex = { enabled = true },
+			bullet = {
+				icons = { "-", "+", "●", "◆" },
+			},
 			heading = {
 				sign = false,
 				icons = {},

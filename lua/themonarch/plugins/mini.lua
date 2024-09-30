@@ -22,6 +22,7 @@ return {
 					"toggleterm",
 					"Trouble",
 					"trouble",
+					"markdown",
 				},
 				callback = function()
 					vim.b.miniindentscope_disable = true
@@ -36,7 +37,26 @@ return {
 		---@type ibl.config
 		opts = {
 			scope = { enabled = false },
-			indent = { char = "│" },
+			indent = {
+				char = "│",
+				tab_char = "│",
+			},
+			exclude = {
+				filetypes = {
+					"help",
+					"alpha",
+					"dashboard",
+					"neo-tree",
+					"Trouble",
+					"trouble",
+					"lazy",
+					"mason",
+					"notify",
+					"toggleterm",
+					"lazyterm",
+					"markdown",
+				},
+			},
 		},
 	},
 	{
@@ -62,5 +82,24 @@ return {
 			},
 			silent = true,
 		},
+	},
+	{
+		"echasnovski/mini.icons",
+		lazy = true,
+		opts = {
+			file = {
+				[".keep"] = { glyph = "󰊢", hl = "MiniIconsGrey" },
+				["devcontainer.json"] = { glyph = "", hl = "MiniIconsAzure" },
+			},
+			filetype = {
+				dotenv = { glyph = "", hl = "MiniIconsYellow" },
+			},
+		},
+		init = function()
+			package.preload["nvim-web-devicons"] = function()
+				require("mini.icons").mock_nvim_web_devicons()
+				return package.loaded["nvim-web-devicons"]
+			end
+		end,
 	},
 }
