@@ -1,4 +1,5 @@
 vim.g.mapleader = " "
+local utils = require("core.utils")
 
 local function map(mode, lhs, rhs, desc)
 	desc = desc or "none"
@@ -8,6 +9,7 @@ end
 local in_vscode = vim.g.vscode ~= nil
 
 if not in_vscode then
+	utils.wezterm()
 	-- this only run if you're NOT in Vscode
 	map("n", "<leader>ds", vim.diagnostic.setloclist, "lsp diagnostic loclist")
 
@@ -46,6 +48,35 @@ if not in_vscode then
 	map("n", "<leader>ft", ":Telescope<cr>", "Other pickers...")
 	map("n", "<leader>fS", ":Telescope resession<cr>", "Find Session")
 	map("n", "<leader>fh", ":Telescope help_tags<cr>", "Find help tags")
+
+  -- stylua: ignore start
+  map("n", "<leader>df", function() utils.telescope_diff_file() end, "Diff file with current buffer")
+  map("n", "<leader>dr", function() utils.telescope_diff_file(true) end, "Diff recent file with current buffer")
+  map("n", "<leader>dg", function() utils.telescope_diff_from_history() end, "Diff from git history")
+	-- stylua: ignore end
+
+	-- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
+	vim.keymap.set("n", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next search result" })
+	vim.keymap.set("x", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next search result" })
+	vim.keymap.set("o", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next search result" })
+	vim.keymap.set("n", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev search result" })
+	vim.keymap.set("x", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev search result" })
+	vim.keymap.set("o", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev search result" })
+
+  -- Code/LSP
+  -- stylua: ignore start
+  map("n", "<leader>ca", vim.lsp.buf.code_action, "Code Action")
+  map("n", "<leader>cd", vim.diagnostic.open_float, "Line Diagnostics")
+  map("n", "<leader>cl", ":LspInfo<cr>", "LSP Info")
+  map("n", "<leader>cr", vim.lsp.buf.rename, "Rename")
+  map("n", "K", vim.lsp.buf.hover, "Hover")
+  map("n", "gD", vim.lsp.buf.declaration, "Goto Declaration")
+  map("n", "gK", vim.lsp.buf.signature_help, "Signature Help")
+  map("n", "gr", ":Telescope lsp_references<cr>", "Goto References")
+  map("n", "gI", function() require("telescope.builtin").lsp_implementations({ reuse_win = true }) end, "Goto Implementation")
+  map("n", "gd", function() require("telescope.builtin").lsp_definitions({ reuse_win = true }) end, "Goto Definition")
+  map("n", "gy", function() require("telescope.builtin").lsp_type_definitions({ reuse_win = true }) end, "Goto Type Definition")
+	-- stylua: ignore end
 
 	-- neo_tree
 	map("n", "<leader>r", ":Neotree focus<CR>")
