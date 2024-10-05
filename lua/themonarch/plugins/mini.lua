@@ -103,4 +103,9 @@ return {
 			end
 		end,
 	},
+	{
+		"echasnovski/mini.comment",
+		event = "VeryLazy",
+		opts = {},
+	},
 }

@@ -9,6 +9,7 @@ local enabled = {
 	"nvim-treesitter",
 	"yanky.nvim",
 	"sqlite.lua",
+	"mini.comment",
 }
 
 local Config = require("lazy.core.config")
