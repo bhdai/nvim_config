@@ -1,3 +1,4 @@
+local utils = require("core.utils")
 return {
 	"nvim-neo-tree/neo-tree.nvim",
 	cmd = "Neotree",
@@ -11,7 +12,7 @@ return {
 		{
 			"<leader>fe",
 			function()
-				require("neo-tree.command").execute({ toggle = true, dir = vim.fn.getcwd() })
+				require("neo-tree.command").execute({ toggle = true, dir = utils.get_project_root() })
 			end,
 			desc = "Explorer NeoTree (Root Dir)",
 		},

@@ -303,4 +303,29 @@ function M.wezterm()
 	})
 end
 
+function M.get_project_root()
+	-- Possible root indicators
+	local indicators = { ".git", "Makefile", "package.json", "Cargo.toml", "pyproject.toml" }
+
+	local current_file = vim.fn.expand("%:p")
+	local current_dir = vim.fn.fnamemodify(current_file, ":h")
+	local root = current_dir
+
+	-- Traverse up the directory tree
+	while root ~= "/" do
+		for _, indicator in ipairs(indicators) do
+			if
+				vim.fn.filereadable(root .. "/" .. indicator) == 1
+				or vim.fn.isdirectory(root .. "/" .. indicator) == 1
+			then
+				return root
+			end
+		end
+		root = vim.fn.fnamemodify(root, ":h")
+	end
+
+	-- If no root found, return the current working directory
+	return vim.fn.getcwd()
+end
+
 return M
