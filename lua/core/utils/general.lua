@@ -328,4 +328,90 @@ function M.get_project_root()
 	return vim.fn.getcwd()
 end
 
+function M.get_root()
+	---@type string?
+	local path = vim.api.nvim_buf_get_name(0)
+	path = path ~= "" and vim.loop.fs_realpath(path) or nil
+	---@type string[]
+	local roots = {}
+	if path then
+		for _, client in pairs(vim.lsp.get_active_clients({ bufnr = 0 })) do
+			local workspace = client.config.workspace_folders
+			local paths = workspace
+					and vim.tbl_map(function(ws)
+						return vim.uri_to_fname(ws.uri)
+					end, workspace)
+				or client.config.root_dir and { client.config.root_dir }
+				or {}
+			for _, p in ipairs(paths) do
+				local r = vim.loop.fs_realpath(p)
+				if path:find(r, 1, true) then
+					roots[#roots + 1] = r
+				end
+			end
+		end
+	end
+	table.sort(roots, function(a, b)
+		return #a > #b
+	end)
+	---@type string?
+	local root = roots[1]
+	if not root then
+		path = path and vim.fs.dirname(path) or vim.loop.cwd()
+		---@type string?
+		root = vim.fs.find({ ".git", "lua" }, { path = path, upward = true })[1]
+		root = root and vim.fs.dirname(root) or vim.loop.cwd()
+	end
+	---@cast root string
+	return root
+end
+
+---@param opts? lsp.Client.filter
+function M.get_clients(opts)
+	local ret = {} ---@type vim.lsp.Client[]
+	if vim.lsp.get_clients then
+		ret = vim.lsp.get_clients(opts)
+	else
+		---@diagnostic disable-next-line: deprecated
+		ret = vim.lsp.get_active_clients(opts)
+		if opts and opts.method then
+			---@param client vim.lsp.Client
+			ret = vim.tbl_filter(function(client)
+				return client.supports_method(opts.method, { bufnr = opts.bufnr })
+			end, ret)
+		end
+	end
+	return opts and opts.filter and vim.tbl_filter(opts.filter, ret) or ret
+end
+
+---@param from string
+---@param to string
+---@param rename? fun()
+function M.on_rename(from, to, rename)
+	local changes = { files = { {
+		oldUri = vim.uri_from_fname(from),
+		newUri = vim.uri_from_fname(to),
+	} } }
+
+	local clients = M.get_clients()
+	for _, client in ipairs(clients) do
+		if client.supports_method("workspace/willRenameFiles") then
+			local resp = client.request_sync("workspace/willRenameFiles", changes, 1000, 0)
+			if resp and resp.result ~= nil then
+				vim.lsp.util.apply_workspace_edit(resp.result, client.offset_encoding)
+			end
+		end
+	end
+
+	if rename then
+		rename()
+	end
+
+	for _, client in ipairs(clients) do
+		if client.supports_method("workspace/didRenameFiles") then
+			client.notify("workspace/didRenameFiles", changes)
+		end
+	end
+end
+
 return M

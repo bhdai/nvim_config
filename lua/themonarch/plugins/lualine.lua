@@ -3,7 +3,7 @@ return {
 	event = "VeryLazy",
 	dependencies = { "echasnovski/mini.icons" },
 	opts = function()
-		local utils = require("core.utils")
+		local utils = require("core.utils.general")
 		local copilot_colors = {
 			[""] = utils.get_hlgroup("Comment"),
 			["Normal"] = utils.get_hlgroup("Comment"),
@@ -92,12 +92,12 @@ return {
 					},
 					{
 						function()
-							local buffer_count = require("core.utils").get_buffer_count()
+							local buffer_count = require("core.utils.general").get_buffer_count()
 
 							return "+" .. buffer_count - 1 .. " "
 						end,
 						cond = function()
-							return require("core.utils").get_buffer_count() > 1
+							return require("core.utils.general").get_buffer_count() > 1
 						end,
 						color = utils.get_hlgroup("Operator", nil),
 						padding = { left = 0, right = 1 },

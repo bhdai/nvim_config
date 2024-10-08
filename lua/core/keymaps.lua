@@ -17,7 +17,7 @@ end
 local in_vscode = vim.g.vscode ~= nil
 
 if not in_vscode then
-	utils.wezterm()
+	utils.general.wezterm()
 	-- this only run if you're NOT in Vscode
 	map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "lsp diagnostic loclist" })
 
@@ -52,9 +52,9 @@ if not in_vscode then
 	map("n", "<leader>fh", ":Telescope help_tags<cr>", { desc = "Find help tags" })
 
   -- stylua: ignore start
-  map("n", "<leader>df", function() utils.telescope_diff_file() end, { desc = "Diff file with current buffer" })
-  map("n", "<leader>dr", function() utils.telescope_diff_file(true) end, { desc = "Diff recent file with current buffer" })
-  map("n", "<leader>dg", function() utils.telescope_diff_from_history() end, { desc = "Diff from git history" })
+  map("n", "<leader>df", function() utils.general.telescope_diff_file() end, { desc = "Diff file with current buffer" })
+  map("n", "<leader>dr", function() utils.general.telescope_diff_file(true) end, { desc = "Diff recent file with current buffer" })
+  map("n", "<leader>dg", function() utils.general.telescope_diff_from_history() end, { desc = "Diff from git history" })
 	-- stylua: ignore end
 
 	-- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
@@ -80,10 +80,21 @@ if not in_vscode then
   map("n", "gy", function() require("telescope.builtin").lsp_type_definitions({ reuse_win = true }) end, { desc = "Goto Type Definition" })
 	-- stylua: ignore end
 
-	-- neo_tree
-	map("n", "<leader>r", ":Neotree focus<CR>")
+	-- -- floating terminal
+	-- local lazyterm = function()
+	-- 	utils.terminal(nil, { cwd = utils.general.get_root() })
+	-- end
+	-- map("n", "<leader>tt", lazyterm, { desc = "Terminal (Root Dir)" })
+	-- map("n", "<leader>tT", function()
+	-- 	utils.terminal()
+	-- end, { desc = "Terminal (cwd)" })
+	-- map("n", "<c-/>", lazyterm, { desc = "Terminal (Root Dir)" })
+	-- map("n", "<c-_>", lazyterm, { desc = "which_key_ignore" })
 
-	-- enalbe/disable render-markdown
+	-- neo_tree
+	map("n", "<leader>R", ":Neotree focus<CR>")
+
+	-- enable/disable render-markdown
 	map("n", "<leader>um", ":RenderMarkdown toggle<CR>")
 
 	map("n", "]t", function()
