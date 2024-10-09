@@ -127,7 +127,12 @@ return {
 
 		local servers = {
 			-- bashls = {}, -- Bash
-			clangd = {}, -- C/C++
+			clangd = {
+				cmd = {
+					"clangd",
+					"--function-arg-placeholders=0",
+				},
+			}, -- C/C++
 			marksman = {}, -- Markdown lsp
 			sqlls = {}, -- SQL
 			eslint = {}, -- React/NextJS/Svelte
