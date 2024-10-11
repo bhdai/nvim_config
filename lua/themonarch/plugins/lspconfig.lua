@@ -8,6 +8,9 @@ return {
 		"hrsh7th/cmp-nvim-lsp", -- for autocompletion
 		-- { "antosha417/nvim-lsp-file-operations", config = true },
 		"nvim-lua/plenary.nvim",
+		{ "justinsgithub/wezterm-types", lazy = true },
+		{ "LuaCATS/luassert", name = "luassert-types", lazy = true },
+		{ "LuaCATS/busted", name = "busted-types", lazy = true },
 		{
 			"folke/lazydev.nvim",
 			ft = "lua",
@@ -15,6 +18,9 @@ return {
 				library = {
 					-- Load luvit types when the `vim.uv` word is found
 					{ path = "luvit-meta/library", words = { "vim%.uv" } },
+					{ path = "wezterm-types", mods = { "wezterm" } },
+					{ path = "luassert-types/library", words = { "assert" } },
+					{ path = "busted-types/library", words = { "describe" } },
 				},
 			},
 		},
