@@ -11,7 +11,7 @@ return {
 			},
 		},
 		config = function()
-			vim.cmd.colorscheme("tokyonight-storm")
+			vim.cmd.colorscheme("tokyonight")
 		end,
 	},
 	{
