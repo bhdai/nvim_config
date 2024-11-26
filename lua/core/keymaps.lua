@@ -147,3 +147,6 @@ map("v", "<leader>D", '"_D')
 
 -- select all
 map("n", "<C-a>", "gg<S-v>G")
+
+-- change word with <c-c>
+map({ "n", "x" }, "<C-c>", "<cmd>normal! ciw<cr>a")
