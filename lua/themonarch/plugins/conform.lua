@@ -1,50 +1,69 @@
 return {
 	"stevearc/conform.nvim",
-	event = "BufReadPre",
-	config = function()
-		vim.g.disable_autoformat = false
-		require("conform").setup({
-			formatters_by_ft = {
-				css = { "prettier" },
-				go = { "goimports_reviser", "gofmt", "golines" },
-				html = { "prettier" },
-				javascript = { "prettier" },
-				json = { "prettier" },
-				lua = { "stylua" },
-				fish = { "fish_indent" },
-				markdown = { "prettier" },
-				scss = { "prettier" },
-				sh = { "shfmt" },
-				templ = { "templ" },
-				toml = { "taplo" },
-				yaml = { "prettier" },
-			},
-
-			default_format_opts = {
-				timeout_ms = 3000,
-				async = false,
-				quiet = false,
-				lsp_format = "fallback",
-			},
-
-			-- funciton to conditionally format after save
-			format_after_save = function()
-				if not vim.g.disable_autoformat then
-					if vim.bo.filetype == "ps1" then
-						vim.lsp.buf.format()
-					else
-						return { lsp_format = "fallback" }
+	event = { "VeryLazy", "BufWritePre" },
+	cmd = { "ConformInfo" },
+	keys = {
+		{
+			"=",
+			function()
+				require("conform").format({ async = true, lsp_fallback = true }, function(err)
+					if not err then
+						if vim.startswith(vim.api.nvim_get_mode().mode:lower(), "v") then
+							vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+						end
 					end
-				end
+				end)
 			end,
-
-			formatters = {
-				goimports_reviser = {
-					command = "goimports-reviser",
-					args = { "-output", "stdout", "$FILENAME" },
-				},
+			mode = "",
+			desc = "Format buffer",
+		},
+	},
+	opts = {
+		formatters_by_ft = {
+			javascript = { "prettierd", "prettier" },
+			typescript = { "prettierd", "prettier" },
+			javascriptreact = { "prettierd", "prettier" },
+			typescriptreact = { "prettierd", "prettier" },
+			css = { "prettierd", "prettier" },
+			scss = { "prettier" },
+			html = { "djlint", "prettierd", "prettier" },
+			templ = { "djlint", "templ" },
+			json = { "prettierd", "prettier" },
+			jsonc = { "prettierd", "prettier" },
+			rasi = { "prettierd", "prettier" },
+			toml = { "taplo" },
+			yaml = { "prettierd", "prettier" },
+			fish = { "fish_indent" },
+			markdown = { "prettierd", "prettier", "injected" },
+			norg = { "injected" },
+			graphql = { "prettierd", "prettier" },
+			lua = { "stylua" },
+			go = { "goimports", "gofumpt" },
+			sh = { "beautysh", "shfmt" },
+			python = { "isort", "ruff" },
+			zig = { "zigfmt" },
+			kotlin = { "ktlint" },
+			["_"] = { "trim_whitespace", "trim_newlines" },
+			["*"] = { "codespell" },
+		},
+		formatters = {
+			shfmt = {
+				prepend_args = { "-i", "2" },
 			},
-		})
+			-- Dealing with old version of prettierd that doesn't support range formatting
+			prettierd = {
+				range_args = false,
+			},
+		},
+		log_level = vim.log.levels.TRACE,
+		format_after_save = { timeout_ms = 500, lsp_fallback = true, async = true, quiet = true },
+	},
+	config = function(_, opts)
+		local conform = require("conform")
+
+		conform.setup(opts)
+
+		vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 
 		-- Toggle format on save
 		vim.api.nvim_create_user_command("ConformToggle", function()
