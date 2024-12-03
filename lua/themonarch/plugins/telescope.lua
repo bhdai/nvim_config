@@ -5,7 +5,7 @@ return {
 		"kkharji/sqlite.lua",
 		"nvim-lua/plenary.nvim",
 		"nvim-tree/nvim-web-devicons",
-		{ "scottmckendry/telescope-resession.nvim", dev = true },
+		{ "scottmckendry/telescope-resession.nvim" },
 		{
 			"nvim-telescope/telescope-fzf-native.nvim",
 			build = function()
@@ -42,7 +42,7 @@ return {
 			extensions = {
 				resession = {
 					path_substitutions = {
-						{ find = home_dir .. "/git/", replace = "󰊢 " },
+						{ find = home_dir .. "/ghq/github.com/", replace = " " },
 					},
 				},
 			},
@@ -98,6 +98,7 @@ return {
 			},
 		})
 
-		require("telescope").load_extension("fzf")
+		telescope.load_extension("fzf")
+		telescope.load_extension("resession")
 	end,
 }
