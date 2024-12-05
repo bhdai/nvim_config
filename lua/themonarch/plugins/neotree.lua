@@ -1,4 +1,4 @@
-local utils = require("core.utils")
+utils = require("core.utils")
 return {
 	"nvim-neo-tree/neo-tree.nvim",
 	cmd = "Neotree",
@@ -66,6 +66,9 @@ return {
 		auto_clean_after_session_restore = true,
 		close_if_last_window = true,
 		filesystem = {
+			filtered_items = {
+				visible = true,
+			},
 			bind_to_cwd = false,
 			follow_current_file = { enabled = true },
 			use_libuv_file_watcher = true,
@@ -109,15 +112,15 @@ return {
 	},
 	config = function(_, opts)
 		local function on_move(data)
-			utils.on_rename(data.source, data.destination)
+			Snacks.rename.on_rename_file(data.source, data.destination)
 		end
-
 		local events = require("neo-tree.events")
 		opts.event_handlers = opts.event_handlers or {}
 		vim.list_extend(opts.event_handlers, {
 			{ event = events.FILE_MOVED, handler = on_move },
 			{ event = events.FILE_RENAMED, handler = on_move },
 		})
+
 		require("neo-tree").setup(opts)
 		vim.api.nvim_create_autocmd("TermClose", {
 			pattern = "*lazygit",
