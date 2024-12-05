@@ -60,12 +60,6 @@ return {
 		},
 	},
 	{
-		"echasnovski/mini.move",
-		event = "VeryLazy",
-		version = false,
-		opts = {},
-	},
-	{
 		"echasnovski/mini.surround",
 		version = false,
 		opts = {

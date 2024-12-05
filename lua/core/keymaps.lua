@@ -17,7 +17,7 @@ end
 local in_vscode = vim.g.vscode ~= nil
 
 if not in_vscode then
-	utils.general.wezterm()
+	-- utils.general.wezterm()
 	-- this only run if you're NOT in Vscode
 	map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "lsp diagnostic loclist" })
 
@@ -112,6 +112,10 @@ end
 
 --exit insert mode you can enable it if you want here i comment it out cuz i prefer to map the esc key to CapsLook key using powertoy
 -- map("n", "jk", "<ESC>")
+
+map("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move lines up" })
+map("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move lines down" })
+map("n", "J", "mzJ`z")
 
 -- better up/down
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true })
