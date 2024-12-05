@@ -2,6 +2,11 @@ local opt = vim.opt
 
 -- editor options
 
+if vim.g.neovide then
+	vim.o.guifont = "Fira Code,Symbols Nerd Font Mono:h34"
+	vim.g.neovide_scale_factor = 0.3
+end
+
 opt.number = true
 opt.relativenumber = true
 opt.clipboard = "unnamedplus"
@@ -31,3 +36,4 @@ opt.termguicolors = true
 -- opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Lower than default (1000) to quickly trigger which-key
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 opt.scrolloff = 12
+vim.g.deprecation_warnings = true
