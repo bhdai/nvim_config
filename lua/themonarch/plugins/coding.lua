@@ -203,41 +203,4 @@ return {
 			})
 		end,
 	},
-	{
-		"stevearc/resession.nvim",
-		lazy = false,
-		config = function()
-			local resession = require("resession")
-
-			local function is_vimpager()
-				local args = vim.v.argv
-				for i, arg in ipairs(args) do
-					if arg == "-c" and args[i + 1]:match("lua require%('core.utils.general'%).colorize%(%)") then
-						return true
-					end
-				end
-				return false
-			end
-
-			resession.setup({})
-			vim.api.nvim_create_autocmd("VimEnter", {
-				callback = function()
-					-- Only load the session if nvim was started with no args and not in pager mode
-					if vim.fn.argc(-1) == 0 and not is_vimpager() then
-						-- Save these to a different directory, so our manual sessions don't get polluted
-						resession.load(vim.fn.getcwd(), { silence_errors = true })
-					end
-				end,
-				nested = true,
-			})
-			vim.api.nvim_create_autocmd("VimLeavePre", {
-				callback = function()
-					-- don't save session if in pager mode
-					if not is_vimpager() then
-						resession.save(vim.fn.getcwd(), { notify = true })
-					end
-				end,
-			})
-		end,
-	},
 }

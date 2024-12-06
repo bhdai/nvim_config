@@ -48,7 +48,6 @@ if not in_vscode then
 	map("n", "<leader>fc", ":Telescope grep_string<cr>", { desc = "Find string under cursor in CWD" })
 	map("n", "<leader>fb", ":Telescope buffers<cr>", { desc = "Fuzzy find buffers" })
 	map("n", "<leader>ft", ":Telescope<cr>", { desc = "Other pickers..." })
-	map("n", "<leader>fS", ":Telescope resession<cr>", { desc = "Find Session" })
 	map("n", "<leader>fh", ":Telescope help_tags<cr>", { desc = "Find help tags" })
 
   -- stylua: ignore start
