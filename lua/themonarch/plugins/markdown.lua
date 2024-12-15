@@ -26,6 +26,7 @@ return {
 	},
 	{
 		"iamcco/markdown-preview.nvim",
+		enabled = false,
 		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
 		build = function()
 			require("lazy").load({ plugins = { "markdown-preview.nvim" } })
@@ -72,12 +73,19 @@ return {
 		},
 	},
 	{
-		"nvimtools/none-ls.nvim",
-		opts = function(_, opts)
-			local nls = require("null-ls")
-			opts.sources = vim.list_extend(opts.sources or {}, {
-				nls.builtins.diagnostics.markdownlint_cli2,
-			})
-		end,
+		"toppair/peek.nvim",
+		enabled = true,
+		build = "deno task --quiet build:fast",
+		opts = {
+			theme = "light",
+		},
+		keys = {
+			{
+				"<leader>cp",
+				function()
+					require("peek").open()
+				end,
+			},
+		},
 	},
 }
