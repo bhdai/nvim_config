@@ -17,7 +17,13 @@ end
 local in_vscode = vim.g.vscode ~= nil
 
 if not in_vscode then
+	-- quickly source file and run lua
+	map("n", "<space><space>x", "<cmd>source %<CR>", { desc = "Source current buffer" })
+	map("n", "<space>x", ":.lua<CR>", { desc = "Execute current line" })
+	map("v", "<space>x", ":.lua<CR>", { desc = "Execute selected lines" })
+
 	-- utils.general.wezterm()
+	utils.general.cowboy()
 	-- this only run if you're NOT in Vscode
 	map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "lsp diagnostic loclist" })
 
@@ -42,6 +48,9 @@ if not in_vscode then
 	map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
 
 	-- Telescope
+	map("n", "<leader>,", ":Telescope buffers sort_mru=true sort_lastused=true<cr>", { desc = "Switch buffer" })
+	map("n", "<leader>:", ":Telescope command_history<cr>", { desc = "Command history" })
+	map("n", "<leader>fg", ":Telescope git_files<cr>", { desc = "Find Files (git-files)" })
 	map("n", "<leader>ff", ":Telescope find_files<cr>", { desc = "Fuzzy find files" })
 	map("n", "<leader>fr", ":Telescope oldfiles<cr>", { desc = "Fuzzy find recent files" })
 	map("n", "<leader>fs", ":Telescope live_grep<cr>", { desc = "Find string in CWD" })
@@ -49,6 +58,16 @@ if not in_vscode then
 	map("n", "<leader>fb", ":Telescope buffers<cr>", { desc = "Fuzzy find buffers" })
 	map("n", "<leader>ft", ":Telescope<cr>", { desc = "Other pickers..." })
 	map("n", "<leader>fh", ":Telescope help_tags<cr>", { desc = "Find help tags" })
+	map("n", "<leader>sD", "<cmd>Telescope diagnostics<cr>", { desc = "Workspace Diagnostics" })
+	map("n", "<leader>sk", "<cmd>Telescope keymaps<cr>", { desc = "Key Maps" })
+	map("n", "<leader>sd", "<cmd>Telescope diagnostics bufnr=0<cr>", { desc = "Document Diagnostics" })
+	map("n", "<leader>sj", "<cmd>Telescope jumplist<cr>", { desc = "Jumplist" })
+	map("n", "<leader>sM", "<cmd>Telescope man_pages<cr>", { desc = "Man Pages" })
+	map("n", "<leader>sq", "<cmd>Telescope quickfix<cr>", { desc = "Quickfix List" })
+
+	-- git
+	map("n", "<leader>gc", "<cmd>Telescope git_commits<CR>", { desc = "Commits" })
+	map("n", "<leader>gs", "<cmd>Telescope git_status<CR>", { desc = "Status" })
 
   -- stylua: ignore start
   map("n", "<leader>df", function() utils.general.telescope_diff_file() end, { desc = "Diff file with current buffer" })
@@ -117,16 +136,17 @@ map("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move lines down" })
 map("n", "J", "mzJ`z")
 
 -- better up/down
-map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true })
-map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { expr = true })
+-- map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true })
+-- map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { expr = true })
+
 map("n", "dw", 'vb"_d')
 
 -- clean search with <esc>
 map("n", "<ESC>", ":noh<CR><ESC>", { desc = "Escape and clear hlsearch" })
 
 -- center cursor when using <C-u/d> for vertical move
-map("n", "<C-u>", "<C-u>zz")
-map("n", "<C-d>", "<C-d>zz")
+-- map("n", "<C-u>", "<C-u>zz")
+-- map("n", "<C-d>", "<C-d>zz")
 
 -- better indenting
 map("v", "<", "<gv")
