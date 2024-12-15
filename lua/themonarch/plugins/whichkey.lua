@@ -21,7 +21,7 @@ return {
 				{ "<leader>rl", group = "lua" },
 				{ "<leader>rs", group = "shell" },
 				{ "<leader>s", group = "search" },
-				{ "<leader>t", group = "toggle" },
+				{ "<leader>t", group = "toggle/trouble" },
 				{ "<leader>w", group = "windows" },
 				{ "<leader>x", group = "diagnostics/quickfix" },
 			},

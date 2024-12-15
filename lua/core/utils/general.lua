@@ -263,31 +263,6 @@ function M.wezterm()
 	})
 end
 
-function M.get_project_root()
-	-- Possible root indicators
-	local indicators = { ".git", "Makefile", "package.json", "Cargo.toml", "pyproject.toml" }
-
-	local current_file = vim.fn.expand("%:p")
-	local current_dir = vim.fn.fnamemodify(current_file, ":h")
-	local root = current_dir
-
-	-- Traverse up the directory tree
-	while root ~= "/" do
-		for _, indicator in ipairs(indicators) do
-			if
-				vim.fn.filereadable(root .. "/" .. indicator) == 1
-				or vim.fn.isdirectory(root .. "/" .. indicator) == 1
-			then
-				return root
-			end
-		end
-		root = vim.fn.fnamemodify(root, ":h")
-	end
-
-	-- If no root found, return the current working directory
-	return vim.fn.getcwd()
-end
-
 function M.get_root()
 	---@type string?
 	local path = vim.api.nvim_buf_get_name(0)
@@ -324,6 +299,22 @@ function M.get_root()
 	end
 	---@cast root string
 	return root
+end
+
+-- Function to open fzf
+function M.open_fzf(opts)
+	opts = opts or {}
+	local fzf_opts = {
+		cwd = opts.cwd or M.get_root(),
+	}
+	require("fzf-lua").files(fzf_opts)
+end
+
+-- Wrapper function to create keymappings
+function M.wrap(opts)
+	return function()
+		M.open_fzf(vim.deepcopy(opts))
+	end
 end
 
 ---@param opts? lsp.Client.filter
@@ -369,6 +360,40 @@ function M.colorize()
 	vim.defer_fn(function()
 		vim.b[buf].minianimate_disable = false
 	end, 2000)
+end
+
+function M.cowboy()
+	---@type table?
+	print("cowboy function was called")
+	local ok = true
+	for _, key in ipairs({ "h", "j", "k", "l", "+", "-" }) do
+		local count = 0
+		local timer = assert(vim.uv.new_timer())
+		local map = key
+		vim.keymap.set("n", key, function()
+			if vim.v.count > 0 then
+				count = 0
+			end
+			if count >= 10 and vim.bo.buftype ~= "nofile" then
+				ok = pcall(vim.notify, "Hold it Cowboy!", vim.log.levels.WARN, {
+					icon = "🤠",
+					id = "cowboy",
+					keep = function()
+						return count >= 10
+					end,
+				})
+				if not ok then
+					return map
+				end
+			else
+				count = count + 1
+				timer:start(2000, 0, function()
+					count = 0
+				end)
+				return map
+			end
+		end, { expr = true, silent = true })
+	end
 end
 
 return M
