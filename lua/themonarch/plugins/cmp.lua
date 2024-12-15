@@ -1,5 +1,6 @@
 return {
 	"hrsh7th/nvim-cmp",
+	enabled = false,
 	version = false,
 	event = "InsertEnter",
 	dependencies = {
@@ -8,63 +9,58 @@ return {
 		"hrsh7th/cmp-cmdline",
 		"L3MON4D3/LuaSnip",
 		"saadparwaiz1/cmp_luasnip",
-		"rafamadriz/friendly-snippets",
-		"onsails/lspkind.nvim",
+		{
+			"tzachar/cmp-tabnine",
+			build = "./install.sh",
+		},
+		{
+			"folke/lazydev.nvim",
+			ft = "lua",
+			opts = {
+				library = {
+					{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+				},
+			},
+		},
 	},
 	config = function()
 		local cmp = require("cmp")
-		local luasnip = require("luasnip")
-		local lspkind = require("lspkind")
+		local ls = require("luasnip")
+		local cmp_select = { behavior = cmp.SelectBehavior.Select }
 		local max_items = 5
 
-		-- loads vscode style snippets from installed plugins (e.g. friendly-snippets)
-		require("luasnip.loaders.from_vscode").lazy_load()
+		local tabnine = require("cmp_tabnine.config")
+		tabnine:setup({
+			max_lines = 1000,
+			max_num_results = 20,
+			sort = true,
+			run_on_every_keystroke = true,
+			snippet_placeholder = "..",
+			show_prediction_strength = false,
+		})
 
 		cmp.setup({
-			window = {
-				completion = {
-					---@diagnostic disable: assign-type-mismatch
-					border = {
-						{ "󱐋", "WarningMsg" },
-						{ "─", "Comment" },
-						{ "╮", "Comment" },
-						{ "│", "Comment" },
-						{ "╯", "Comment" },
-						{ "─", "Comment" },
-						{ "╰", "Comment" },
-						{ "│", "Comment" },
-					},
-					scrollbar = false,
-				},
-				documentation = {
-					border = {
-						{ "", "DiagnosticHint" },
-						{ "─", "Comment" },
-						{ "╮", "Comment" },
-						{ "│", "Comment" },
-						{ "╯", "Comment" },
-						{ "─", "Comment" },
-						{ "╰", "Comment" },
-						{ "│", "Comment" },
-					},
-					---@diagnostic enable: assign-type-mismatch
-					scrollbar = false,
-				},
-			},
-
 			completion = {
 				completeopt = "menu,menuone,preview,noinsert",
 			},
 
+			window = {
+				-- completion = cmp.config.window.bordered(),
+				-- documentation = cmp.config.window.bordered(),
+			},
+
 			snippet = {
 				expand = function(args)
-					vim.snippet.expand(args.body)
+					ls.lsp_expand(args.body)
+					-- vim.snippet.expand(args.body)
 				end,
 			},
 
 			mapping = {
-				["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-				["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+				["<C-b>"] = cmp.mapping.scroll_docs(-4),
+				["<C-f>"] = cmp.mapping.scroll_docs(4),
+				["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
+				["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
 				["<C-y>"] = cmp.mapping(
 					cmp.mapping.confirm({
 						behavior = cmp.ConfirmBehavior.Insert,
@@ -75,19 +71,46 @@ return {
 			},
 
 			sources = cmp.config.sources({
-				{ name = "nvim_lsp", max_item_count = max_items },
-				{ name = "luasnip", max_item_count = max_items },
-				{ name = "buffer", max_item_count = max_items },
-				{ name = "path", max_item_count = max_items },
-				{ name = "lazydev", max_item_count = max_items, group_index = 0 },
+				{ name = "nvim_lsp", max_item_count = 5 },
+				{ name = "luasnip" },
+				{ name = "cmp_tabnine" },
+				{ name = "buffer" },
+				{ name = "path" },
+				{ name = "lazydev", group_index = 0 },
 			}),
 
-			-- configure lspkind for vs-code like pictograms in completion menu
+			-- icons kinds
 			formatting = {
-				format = lspkind.cmp_format({
-					maxwidth = 50,
-					ellipsis_char = "...",
-				}),
+				format = function(entry, vim_item)
+					local icons = require("core.icons")
+					if icons.kinds[vim_item.kind] then
+						vim_item.kind = icons.kinds[vim_item.kind] .. vim_item.kind
+					end
+
+					-- Handle TabNine entries
+					if entry.source.name == "cmp_tabnine" then
+						vim_item.kind = "TabNine"
+						if entry.completion_item.data and entry.completion_item.data.detail then
+							vim_item.kind = vim_item.kind .. " " .. entry.completion_item.data.detail
+						end
+						if entry.completion_item.data and entry.completion_item.data.multiline then
+							vim_item.kind = vim_item.kind .. " [ML]"
+						end
+					end
+
+					local widths = {
+						abbr = vim.g.cmp_widths and vim.g.cmp_widths.abbr or 40,
+						menu = vim.g.cmp_widths and vim.g.cmp_widths.menu or 30,
+					}
+
+					for key, width in pairs(widths) do
+						if vim_item[key] and vim.fn.strdisplaywidth(vim_item[key]) > width then
+							vim_item[key] = vim.fn.strcharpart(vim_item[key], 0, width - 1) .. "..."
+						end
+					end
+
+					return vim_item
+				end,
 			},
 		})
 
@@ -106,11 +129,14 @@ return {
 				{ name = "cmdline", max_item_count = max_items },
 			}),
 		})
-
-		vim.keymap.set({ "i", "s" }, "<C-k>", function()
-			if luasnip.expand_or_jumpable() then
-				luasnip.expand_or_jump()
-			end
-		end, { silent = true })
+		-- Set up an autocmd to prefetch Python files
+		local au = vim.api.nvim_create_augroup("tabnine", { clear = true })
+		vim.api.nvim_create_autocmd("BufRead", {
+			group = au,
+			pattern = "*.py",
+			callback = function()
+				require("cmp_tabnine"):prefetch(vim.fn.expand("%:p"))
+			end,
+		})
 	end,
 }
