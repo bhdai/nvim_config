@@ -1,37 +1,51 @@
 return {
 	{
 		"stevearc/aerial.nvim",
+		enabled = false,
 		-- Optional dependencies
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter",
 			"nvim-tree/nvim-web-devicons",
 		},
+		opts = function()
+			local icons = require("core.icons")
+			local aerial_icons = vim.deepcopy(icons.kinds)
+
+			aerial_icons.lua = { Package = aerial_icons.Control }
+			local filter_kind = false
+			if icons.kind_filter then
+				filter_kind = assert(vim.deepcopy(icons.kind_filter))
+				filter_kind._ = filter_kind.default
+				filter_kind.default = nil
+			end
+
+			local opts = {
+				attach_mode = "global",
+				backends = { "lsp", "treesitter", "markdown", "man" },
+				show_guides = true,
+				layout = {
+					resize_to_content = false,
+					win_opts = {
+						winhl = "Normal:NormalFloat,FloatBorder:NormalFloat,SignColumn:SignColumnSB",
+						signcolumn = "yes",
+						statuscolumn = " ",
+					},
+				},
+				icons = aerial_icons,
+				filter_kind = filter_kind,
+        -- stylua: ignore
+        guides = {
+          mid_item   = "├╴",
+          last_item  = "└╴",
+          nested_top = "│ ",
+          whitespace = "  ",
+        },
+			}
+
+			return opts
+		end,
 		keys = {
 			{ "<leader>cs", "<cmd>AerialToggle<cr>", desc = "Aerial (Symbols)" },
-		},
-		opts = {
-			attach_mode = "global",
-			backends = { "lsp", "treesitter", "markdown", "man" },
-			show_guides = true,
-			layout = { min_width = 28 },
-			filter_kind = false,
-      -- stylua: ignore
-      guides = {
-        mid_item = "├ ",
-        last_item = "└ ",
-        nested_top = "│ ",
-        whitespace = "  ",
-      },
-			keymaps = {
-				["[y"] = "actions.prev",
-				["]y"] = "actions.next",
-				["[Y"] = "actions.prev_up",
-				["]Y"] = "actions.next_up",
-				["{"] = false,
-				["}"] = false,
-				["[["] = false,
-				["]]"] = false,
-			},
 		},
 	},
 	{
