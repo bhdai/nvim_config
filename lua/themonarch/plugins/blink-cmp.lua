@@ -60,7 +60,7 @@ return {
 			},
 
 			signature = {
-				enabled = true,
+				enabled = false,
 			},
 
 			snippets = {
@@ -80,7 +80,7 @@ return {
 
 			sources = {
 				-- compat = { "cmp_tabnine" },
-				default = { "lsp", "path", "snippets", "buffer", "lazydev", "cmp_tabnine" },
+				default = { "lsp", "path", "snippets", "cmp_tabnine", "buffer", "lazydev" },
 				-- cmdline = {},
 				providers = {
 					-- dont show LuaLS require statements when lazydev has items
