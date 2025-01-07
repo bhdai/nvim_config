@@ -13,6 +13,7 @@ opt.clipboard = "unnamedplus"
 opt.syntax = "on"
 opt.autoindent = true
 opt.ignorecase = true -- Case insensitive searching UNLESS /C or capital in search
+opt.smartcase = true -- Case insensitive searching UNLESS /C or capital in search
 opt.smartindent = true -- insert indent automatically
 opt.spelllang = "en"
 opt.cursorline = true
