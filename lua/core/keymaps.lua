@@ -17,6 +17,9 @@ end
 local in_vscode = vim.g.vscode ~= nil
 
 if not in_vscode then
+	-- dev
+	map("n", "<leader>tf", "<cmd>PlenaryBustedFile %<cr>", { desc = "Test" })
+
 	-- quickly source file and run lua
 	map("n", "<space><space>x", "<cmd>source %<CR>", { desc = "Source current buffer" })
 	map("n", "<space>x", ":.lua<CR>", { desc = "Execute current line" })
