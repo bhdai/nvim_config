@@ -364,7 +364,6 @@ end
 
 function M.cowboy()
 	---@type table?
-	print("cowboy function was called")
 	local ok = true
 	for _, key in ipairs({ "h", "j", "k", "l", "+", "-" }) do
 		local count = 0

@@ -6,9 +6,9 @@ return {
 		opts_extend = {
 			"sources.completion.enabled_providers",
 			"sources.compat",
+			"sources.default",
 		},
 		dependencies = {
-			-- "rafamadriz/friendly-snippets",
 			"L3MON4D3/LuaSnip",
 			"tzachar/cmp-tabnine",
 			{
@@ -63,9 +63,7 @@ return {
 				enabled = false,
 			},
 
-
 			sources = {
-				-- compat = { "cmp_tabnine" },
 				default = { "lsp", "path", "snippets", "cmp_tabnine", "buffer", "lazydev" },
 				-- cmdline = {},
 				providers = {
