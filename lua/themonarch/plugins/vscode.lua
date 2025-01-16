@@ -4,12 +4,10 @@ end
 
 local enabled = {
 	"lazy.nvim",
-	"mini.move",
 	"mini.surround",
 	"nvim-treesitter",
-	"yanky.nvim",
-	"sqlite.lua",
 	"mini.comment",
+	"snacks.nvim",
 }
 
 local Config = require("lazy.core.config")
@@ -18,9 +16,10 @@ Config.options.change_detection.enabled = false
 Config.options.defaults.cond = function(plugin)
 	return vim.tbl_contains(enabled, plugin.name) or plugin.vscode
 end
+vim.g.snacks_animate = false
 
 vim.api.nvim_create_autocmd("User", {
-	pattern = "VscodeNeovimKeyMaps",
+	pattern = "VSCodeNeovimKeymap",
 	callback = function()
 		vim.keymap.set("n", "<leader>P", "<cmd>Find<cr>")
 		vim.keymap.set("n", "<leader>/", [[<cmd>call VSCodeNotify('workbench.action.findInFiles')<cr>]])
@@ -39,7 +38,18 @@ vim.api.nvim_create_autocmd("User", {
 	end,
 })
 
+vim.api.nvim_exec_autocmds("User", { pattern = "VSCodeNeovimKeymap" })
+
 return {
+	{
+		"snacks.nvim",
+		opts = {
+			indent = { enabled = false },
+			scroll = { enabled = false },
+			notifier = { enabled = false },
+			statuscolumn = { enabled = false },
+		},
+	},
 	{
 		"folke/lazy.nivm",
 		config = function(_, opts)

@@ -45,7 +45,3 @@ require("lazy").setup({
 	-- 	pills = false,
 	-- },
 })
-
--- trigger custom event after all the the plugins are initialized
--- custom event for vscode-neovim
-vim.cmd("doautocmd User VscodeNeovimKeyMaps")
