@@ -17,6 +17,7 @@ end
 local in_vscode = vim.g.vscode ~= nil
 
 if not in_vscode then
+	-- these only run if NOT in Vscode
 	-- dev
 	map("n", "<leader>tf", "<cmd>PlenaryBustedFile %<cr>", { desc = "Test" })
 
@@ -27,7 +28,6 @@ if not in_vscode then
 
 	-- utils.general.wezterm()
 	utils.general.cowboy()
-	-- this only run if you're NOT in Vscode
 	map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "lsp diagnostic loclist" })
 
 	-- lazy

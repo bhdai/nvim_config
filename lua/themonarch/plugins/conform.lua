@@ -4,10 +4,10 @@ return {
 	cmd = { "ConformInfo" },
 	opts = {
 		formatters_by_ft = {
-			javascript = { "prettierd", "prettier" },
-			typescript = { "prettierd", "prettier" },
-			javascriptreact = { "prettierd", "prettier" },
-			typescriptreact = { "prettierd", "prettier" },
+			javascript = { "dprint", "prettier" },
+			typescript = { "dprint", "prettier" },
+			javascriptreact = { "dprint", "prettier" },
+			typescriptreact = { "dprint", "prettier" },
 			css = { "prettierd", "prettier" },
 			scss = { "prettier" },
 			html = { "djlint", "prettierd", "prettier" },
@@ -19,8 +19,6 @@ return {
 			yaml = { "prettierd", "prettier" },
 			fish = { "fish_indent" },
 			markdown = { "prettierd", "prettier", "injected" },
-			norg = { "injected" },
-			graphql = { "prettierd", "prettier" },
 			lua = { "stylua" },
 			go = { "goimports", "gofumpt" },
 			sh = { "beautysh", "shfmt" },
