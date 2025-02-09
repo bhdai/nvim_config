@@ -11,6 +11,7 @@ return {
 				vim.ui.open(url)
 			end,
 		},
+    zen = {},
     scroll = {enabled = false},
 		bigfile = { enabled = true },
 		dashboard = { enabled = false },
@@ -28,6 +29,8 @@ return {
 		},
 	},
   keys = {
+    { "<leader>z",  function() Snacks.zen() end, desc = "Toggle Zen Mode" },
+    { "<leader>Z",  function() Snacks.zen.zoom() end, desc = "Toggle Zoom" },
     { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
     { "<leader>S",  function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
     { "<leader>st",  function() Snacks.scratch({ icon = " ", name = "Todo", ft = "markdown", file = "~/workplace/TODO.md" }) end, desc = "Todo List" },
