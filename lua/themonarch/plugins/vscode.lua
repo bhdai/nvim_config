@@ -63,4 +63,8 @@ return {
 			highlight = { enable = false },
 		},
 	},
+	{
+		"sphamba/smear-cursor.nvim",
+		enabled = false,
+	},
 }
