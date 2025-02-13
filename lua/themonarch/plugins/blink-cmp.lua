@@ -59,9 +59,9 @@ return {
 				},
 			},
 
-			signature = {
-				enabled = false,
-			},
+			-- signature = {
+			-- 	enabled = false,
+			-- },
 
 			sources = {
 				default = { "lsp", "path", "snippets", "cmp_tabnine", "buffer", "lazydev" },
