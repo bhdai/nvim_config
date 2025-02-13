@@ -24,7 +24,7 @@ return {
 						icon_hl = "Boolean",
 						desc = "Files ",
 						group = "Statement",
-						action = "Telescope find_files",
+						action = "FzfLua files",
 						key = "f",
 					},
 					{
@@ -32,7 +32,7 @@ return {
 						icon_hl = "Boolean",
 						desc = "Recent ",
 						group = "String",
-						action = "Telescope oldfiles",
+						action = "FzfLua oldfiles",
 						key = "r",
 					},
 					{
@@ -40,7 +40,7 @@ return {
 						icon_hl = "Boolean",
 						desc = "Grep ",
 						group = "ErrorMsg",
-						action = "Telescope live_grep",
+						action = "FzfLua live_grep",
 						key = "g",
 					},
 					{
