@@ -10,7 +10,6 @@ return {
 		},
 		dependencies = {
 			"L3MON4D3/LuaSnip",
-			"tzachar/cmp-tabnine",
 			{
 				"saghen/blink.compat",
 				opts = {},
@@ -64,16 +63,12 @@ return {
 			-- },
 
 			sources = {
-				default = { "lsp", "path", "snippets", "cmp_tabnine", "buffer", "lazydev" },
+				default = { "lsp", "path", "snippets", "buffer", "lazydev" },
 				-- cmdline = {},
 				providers = {
 					-- dont show LuaLS require statements when lazydev has items
 					lsp = { fallbacks = { "lazydev" } },
 					lazydev = { name = "LazyDev", module = "lazydev.integrations.blink" },
-					cmp_tabnine = {
-						name = "cmp_tabnine",
-						module = "blink.compat.source",
-					},
 				},
 			},
 		},
