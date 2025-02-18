@@ -15,10 +15,10 @@ return {
       },
       search = {
         anaconda_envs = {
-            command = "fd bin/python ~/miniforge3/envs --full-path --color never -E /proc"
+          command = [[fd 'bin/python$' ~/miniforge3/envs --full-path --color never -E /proc]]
         },
         anaconda_base = {
-            command = "fd /python ~/miniforge3/bin --full-path --color never -E /proc",
+          command = [[fd '/python$' ~/miniforge3/bin --full-path --color never -E /proc]],
         },
       }
     }
