@@ -39,3 +39,5 @@ opt.termguicolors = true
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 opt.scrolloff = 12
 vim.g.deprecation_warnings = true
+vim.g.my_python_lsp = "basedpyright" -- or "pyright"
+vim.g.my_python_ruff = "ruff" -- or "ruff_lsp"

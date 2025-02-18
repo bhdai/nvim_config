@@ -106,8 +106,26 @@ return {
 			},
 		})
 
+    -- define which python lsp to use
+    -- local my_python_lsp = "basedpyright" -- "pyright"
+    -- local my_python_lint = "ruff" -- "ruff_lsp"
+    local my_python_lsp = vim.g.my_python_lsp or "pyright"
+    local my_python_lint = vim.g.my_python_ruff or "ruff"
+
+    local server_to_check = {"pyright", "basedpyright", "ruff", "ruff_lsp"}
+
+    local servers = {}
+
+    for _, server in ipairs(server_to_check) do
+      local enable = (server == my_python_lsp) or (server == my_python_lint)
+      servers[server] = servers[server] or {}
+      servers[server].enable = enable
+    end
+
 		require("mason-lspconfig").setup({
 			ensure_installed = {
+        my_python_lsp,
+        my_python_lint,
 				"bashls",
 				"clangd",
 				"pyright",
@@ -116,11 +134,27 @@ return {
 			},
 
 			handlers = {
-				function(server_name)
-					require("lspconfig")[server_name].setup({
-						capabilities = capabilities,
-					})
-				end,
+				-- function(server_name)
+				--       require("lspconfig")[server_name].setup({
+				--         capabilities = capabilities,
+				--       })
+				-- end,
+
+        function(server_name)
+          if servers[server_name] ~= nil then
+            if servers[server_name].enable then
+              lspconfig[server_name].setup({
+                capabilities = capabilities,
+                settings = servers[server_name].settings or {},
+              })
+            end
+          else
+            -- for servers not in custom table, just set them up normally.
+            lspconfig[server_name].setup({
+              capabilities = capabilities,
+            })
+          end
+        end,
 
 				["lua_ls"] = function()
 					lspconfig.lua_ls.setup({
