@@ -85,7 +85,7 @@ return {
 
 				if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
 					vim.lsp.inlay_hint.enable(true, { env.buf })
-					keymap("n", "<leader>ti", function()
+					keymap("n", "<leader>uh", function()
 						vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = env.buf }))
 					end, "Toggle inlay hints")
 				end
