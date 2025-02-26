@@ -26,7 +26,7 @@ return {
 	},
 	{
 		"iamcco/markdown-preview.nvim",
-		enabled = false,
+		enabled = true,
 		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
 		build = function()
 			require("lazy").load({ plugins = { "markdown-preview.nvim" } })
@@ -74,7 +74,7 @@ return {
 	},
 	{
 		"toppair/peek.nvim",
-		enabled = true,
+		enabled = false,
 		build = "deno task --quiet build:fast",
 		opts = {
 			theme = "light",
