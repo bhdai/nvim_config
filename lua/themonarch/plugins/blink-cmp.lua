@@ -24,6 +24,7 @@ return {
 					},
 				},
 			},
+			{ "giuxtaposition/blink-cmp-copilot" },
 		},
 		event = "InsertEnter",
 
@@ -54,7 +55,7 @@ return {
 					auto_show_delay_ms = 200,
 				},
 				ghost_text = {
-					enabled = vim.g.ai_cmp,
+					enabled = true,
 				},
 			},
 
@@ -63,12 +64,19 @@ return {
 			-- },
 
 			sources = {
-				default = { "lsp", "path", "snippets", "buffer", "lazydev" },
+				default = { "lsp", "path", "snippets", "copilot", "buffer", "lazydev" },
 				-- cmdline = {},
 				providers = {
 					-- dont show LuaLS require statements when lazydev has items
 					lsp = { fallbacks = { "lazydev" } },
 					lazydev = { name = "LazyDev", module = "lazydev.integrations.blink" },
+          copilot = {
+            name = "copilot",
+            module = "blink-cmp-copilot",
+            -- kind = "Copilot",
+            score_offset = 100,
+            async = true,
+          },
 				},
 			},
 		},
