@@ -107,8 +107,6 @@ return {
 		})
 
     -- define which python lsp to use
-    -- local my_python_lsp = "basedpyright" -- "pyright"
-    -- local my_python_lint = "ruff" -- "ruff_lsp"
     local my_python_lsp = vim.g.my_python_lsp or "pyright"
     local my_python_lint = vim.g.my_python_ruff or "ruff"
 

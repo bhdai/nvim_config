@@ -7,7 +7,7 @@ local general = augroup("General Settings", { clear = true })
 
 autocmd("TextYankPost", {
 	desc = "Hight light when yanking text",
-	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+	group = augroup("highlight_yank", { clear = true }),
 	callback = function()
 		vim.highlight.on_yank()
 	end,

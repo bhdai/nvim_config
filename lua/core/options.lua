@@ -38,5 +38,5 @@ opt.termguicolors = true
 -- opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Lower than default (1000) to quickly trigger which-key
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 vim.g.deprecation_warnings = true
-vim.g.my_python_lsp = "basedpyright" -- or "pyright"
+-- vim.g.my_python_lsp = "basedpyright" -- or "pyright"
 vim.g.my_python_ruff = "ruff" -- or "ruff_lsp"
