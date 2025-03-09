@@ -129,6 +129,7 @@ return {
 				"pyright",
 				"lua_ls",
 				"ts_ls",
+        "jdtls",
 			},
 
 			handlers = {
@@ -186,6 +187,9 @@ return {
 						},
 					})
 				end,
+        ["jdtls"] = function()
+          return true -- avoid duplicate server
+        end
 			},
 		})
 	end,
