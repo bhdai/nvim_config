@@ -43,6 +43,7 @@ return {
 				},
 				{ title = "Spectre", ft = "spectre_panel", size = { height = 0.4 } },
 				{ title = "Neotest Output", ft = "neotest-output-panel", size = { height = 15 } },
+				{ title = "DB Query Result", ft = "dbout" },
 			},
 			left = {
 				{ title = "Neotest Summary", ft = "neotest-summary" },
@@ -56,6 +57,15 @@ return {
 					size = { width = 0.4 },
 					filter = function(buf, win)
 						return vim.api.nvim_win_get_config(win).relative == ""
+					end,
+				},
+				{
+					title = "Database",
+					ft = "dbui",
+					pinned = true,
+					width = 0.3,
+					open = function()
+						vim.cmd("DBUI")
 					end,
 				},
 			},
