@@ -66,17 +66,21 @@ return {
 			sources = {
 				default = { "lsp", "path", "snippets", "copilot", "buffer", "lazydev" },
 				-- cmdline = {},
+				per_filetype = {
+					sql = { "snippets", "dadbod", "buffer" },
+				},
 				providers = {
 					-- dont show LuaLS require statements when lazydev has items
 					lsp = { fallbacks = { "lazydev" } },
 					lazydev = { name = "LazyDev", module = "lazydev.integrations.blink" },
-          copilot = {
-            name = "copilot",
-            module = "blink-cmp-copilot",
-            -- kind = "Copilot",
-            score_offset = 100,
-            async = true,
-          },
+					copilot = {
+						name = "copilot",
+						module = "blink-cmp-copilot",
+						-- kind = "Copilot",
+						score_offset = 100,
+						async = true,
+					},
+					dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
 				},
 			},
 		},

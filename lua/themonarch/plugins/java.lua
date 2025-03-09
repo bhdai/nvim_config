@@ -19,7 +19,7 @@ return {
       -- build the command for starting jdtls
       local cmd = { jdtls_bin}
 
-      -- Set up a configuration directory (you can customize this path)
+      -- set up a configuration directory
       local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
       local config_dir = vim.fn.stdpath("cache") .. "/jdtls_config/" .. project_name
       table.insert(cmd, "-configuration")
@@ -29,9 +29,9 @@ return {
 
       local config = {
         cmd = cmd,
-        -- Find the project root by looking for markers like .git, mvnw, or gradlew
+        -- find the project root by looking for markers like .git, mvnw, or gradlew
         root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" }),
-        -- Basic settings; feel free to extend this as needed.
+        -- basic settings
         settings = {
           java = {
             inlayHints = {
@@ -48,7 +48,7 @@ return {
       jdtls.start_or_attach(config)
     end
 
-    -- Create an autocmd so that jdtls attaches when a Java file is opened.
+    -- create an autocmd so that jdtls attaches when a Java file is opened.
     vim.api.nvim_create_autocmd("FileType", {
       pattern = "java",
       callback = function()
@@ -56,12 +56,12 @@ return {
       end,
     })
 
-    -- Optionally, if the current buffer is already a Java file, attach immediately.
+    -- if the current buffer is already a Java file, attach immediately.
     if vim.bo.filetype == "java" then
       start_jdtls()
     end
 
-    -- Optionally, set up some key mappings using which-key if installed.
+    -- set up some key mappings using which-key if installed.
     local wk_status, wk = pcall(require, "which-key")
     if wk_status then
       wk.register({
