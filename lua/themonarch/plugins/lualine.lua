@@ -4,20 +4,12 @@ return {
 	dependencies = { "echasnovski/mini.icons" },
 	opts = function()
 		local utils = require("core.utils.general")
+		local icons = require("core.icons")
 		local copilot_colors = {
 			[""] = utils.get_hlgroup("Comment"),
 			["Normal"] = utils.get_hlgroup("Comment"),
 			["Warning"] = utils.get_hlgroup("DiagnosticError"),
 			["InProgress"] = utils.get_hlgroup("DiagnosticWarn"),
-		}
-
-		local filetype_map = {
-			lazy = { name = "lazy.nvim", icon = "💤" },
-			minifiles = { name = "minifiles", icon = "🗂️ " },
-			toggleterm = { name = "terminal", icon = "🐚" },
-			mason = { name = "mason", icon = "🔨" },
-			TelescopePrompt = { name = "telescope", icon = "🔍" },
-			["copilot-chat"] = { name = "copilot", icon = "🤖" },
 		}
 
 		return {
@@ -43,52 +35,17 @@ return {
 					{
 						"diagnostics",
 						symbols = {
-							error = " ",
-							warn = " ",
-							info = " ",
-							hint = "󰝶 ",
+							error = icons.diagnostics.Error,
+							warn = icons.diagnostics.Warn,
+							info = icons.diagnostics.Info,
+							hint = icons.diagnostics.Hint,
 						},
 					},
-					{
-						function()
-							local devicons = require("nvim-web-devicons")
-							local ft = vim.bo.filetype
-							local icon
-							if filetype_map[ft] then
-								return " " .. filetype_map[ft].icon
-							end
-							if icon == nil then
-								icon = devicons.get_icon(vim.fn.expand("%:t"))
-							end
-							if icon == nil then
-								icon = devicons.get_icon_by_filetype(ft)
-							end
-							if icon == nil then
-								icon = " 󰈤"
-							end
-
-							return icon .. " "
-						end,
-						color = function()
-							local _, hl = require("nvim-web-devicons").get_icon(vim.fn.expand("%:t"))
-							if hl then
-								return hl
-							end
-							return utils.get_hlgroup("Normal")
-						end,
-						separator = "",
-						padding = { left = 0, right = 0 },
-					},
+					{ "filetype", icon_only = true, separator = "", padding = { left = 0, right = 0 } },
 					{
 						"filename",
 						padding = { left = 0, right = 0 },
-						fmt = function(name)
-							if filetype_map[vim.bo.filetype] then
-								return filetype_map[vim.bo.filetype].name
-							else
-								return name
-							end
-						end,
+            color = { gui = "bold" },
 					},
 					{
 						function()
@@ -133,7 +90,6 @@ return {
 					},
 					{
 						function()
-							local icons = require("core.icons")
 							local status = require("copilot.status").data
 							return icons.kinds.Copilot .. (status.message or "")
 						end,
@@ -152,21 +108,16 @@ return {
 					{ "diff" },
 				},
 				lualine_y = {
-					{
-						"progress",
-					},
-					{
-						"location",
-						color = utils.get_hlgroup("Boolean"),
-					},
+					{ "progress", padding = { left = 1, right = 1 } },
+					{ "location", padding = { left = 0, right = 1 } },
 				},
 				lualine_z = {
-					{
-						"datetime",
-						style = "  %X",
-					},
+					function()
+						return " " .. os.date("%R")
+					end,
 				},
 			},
+			extensions = { "fzf", "mason", "lazy" },
 		}
 	end,
 }
