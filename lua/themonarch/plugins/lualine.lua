@@ -133,9 +133,9 @@ return {
 					},
 					{
 						function()
-							local icon = " "
-							local status = require("copilot.api").status.data
-							return icon .. (status.message or "")
+							local icons = require("core.icons")
+							local status = require("copilot.status").data
+							return icons.kinds.Copilot .. (status.message or "")
 						end,
 						cond = function()
 							local ok, clients = pcall(vim.lsp.get_clients, { name = "copilot", bufnr = 0 })
@@ -145,7 +145,7 @@ return {
 							if not package.loaded["copilot"] then
 								return
 							end
-							local status = require("copilot.api").status.data
+							local status = require("copilot.status").data
 							return copilot_colors[status.status] or copilot_colors[""]
 						end,
 					},
