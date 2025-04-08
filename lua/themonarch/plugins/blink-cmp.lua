@@ -1,8 +1,7 @@
 return {
 	{
 		"saghen/blink.cmp",
-		enabled = true,
-		build = "cargo build --release",
+		version = "1.*",
 		opts_extend = {
 			"sources.completion.enabled_providers",
 			"sources.compat",
@@ -62,6 +61,19 @@ return {
 			-- signature = {
 			-- 	enabled = false,
 			-- },
+
+			keymap = {
+				["<Tab>"] = {
+					"snippet_forward",
+					function()
+						if vim.g.ai_accept then
+							return vim.g.ai_accept()
+						end
+					end,
+					"fallback",
+				},
+				["<S-Tab>"] = { "snippet_backward", "fallback" },
+			},
 
 			sources = {
 				default = { "lsp", "path", "snippets", "copilot", "buffer", "lazydev" },
