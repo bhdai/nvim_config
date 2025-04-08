@@ -17,25 +17,10 @@ return {
 		config.defaults.keymap.builtin["<c-f>"] = "preview-page-down"
 		config.defaults.keymap.builtin["<c-b>"] = "preview-page-up"
 
-		-- Optional: Trouble integration if you use trouble.nvim
+    -- trouble
 		if vim.fn.exists("g:trouble") == 1 then
 			config.defaults.actions.files["ctrl-t"] = require("trouble.sources.fzf").actions.open
 		end
-
-		-- (Optional) Toggle root dir functionality.
-		-- If you don’t need this, you can remove it.
-		-- Here we simply call fzf-lua.files with the current options.
-		--[[
-    config.defaults.actions.files["ctrl-r"] = function(_, ctx)
-      local o = vim.deepcopy(ctx.__call_opts)
-      o.root = o.root == false
-      o.cwd = nil
-      o.buf = ctx.__CTX.bufnr
-      require("fzf-lua").files(o)
-    end
-    config.defaults.actions.files["alt-c"] = config.defaults.actions.files["ctrl-r"]
-    config.set_action_helpstr(config.defaults.actions.files["ctrl-r"], "toggle-root-dir")
-    --]]
 
 		-- Setup image previewer (if an image viewer is available)
 		local img_previewer = nil
@@ -71,33 +56,6 @@ return {
 					ueberzug_scaler = "fit_contain",
 				},
 			},
-			-- -- This function customizes the vim.ui.select behavior.
-			-- ui_select = function(fzf_opts, items)
-			--   return vim.tbl_deep_extend("force", fzf_opts, {
-			--     prompt = " ",
-			--     winopts = {
-			--       title = " " .. vim.trim((fzf_opts.prompt or "Select"):gsub("%s*:%s*$", "")) .. " ",
-			--       title_pos = "center",
-			--     },
-			--   },
-			--   -- If the kind is "codeaction", use a vertical layout with extra height for a preview.
-			--   (fzf_opts.kind == "codeaction") and {
-			--     winopts = {
-			--       layout = "vertical",
-			--       height = math.floor(math.min(vim.o.lines * 0.8 - 16, #items + 2) + 0.5) + 16,
-			--       width = 0.5,
-			--       preview = {
-			--         layout = "vertical",
-			--         vertical = "down:15,border-top",
-			--       },
-			--     },
-			--   } or {
-			--     winopts = {
-			--       width = 0.5,
-			--       height = math.floor(math.min(vim.o.lines * 0.8, #items + 2) + 0.5),
-			--     },
-			--   })
-			-- end,
 			winopts = {
 				width = 0.8,
 				height = 0.8,
