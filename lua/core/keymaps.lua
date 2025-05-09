@@ -51,14 +51,14 @@ if not in_vscode then
 	map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
 
 	-- git
-	map("n", "<leader>gc", "<cmd>Telescope git_commits<CR>", { desc = "Commits" })
-	map("n", "<leader>gs", "<cmd>Telescope git_status<CR>", { desc = "Status" })
+	map("n", "<leader>gc", "<cmd>FzfLua git_commits<CR>", { desc = "Commits" })
+	map("n", "<leader>gs", "<cmd>FzfLua git_status<CR>", { desc = "Status" })
 
-  -- stylua: ignore start
-  map("n", "<leader>df", function() utils.general.telescope_diff_file() end, { desc = "Diff file with current buffer" })
-  map("n", "<leader>dr", function() utils.general.telescope_diff_file(true) end, { desc = "Diff recent file with current buffer" })
-  map("n", "<leader>dg", function() utils.general.telescope_diff_from_history() end, { desc = "Diff from git history" })
-	-- stylua: ignore end
+	--  -- stylua: ignore start
+	--  map("n", "<leader>df", function() utils.general.telescope_diff_file() end, { desc = "Diff file with current buffer" })
+	--  map("n", "<leader>dr", function() utils.general.telescope_diff_file(true) end, { desc = "Diff recent file with current buffer" })
+	--  map("n", "<leader>dg", function() utils.general.telescope_diff_from_history() end, { desc = "Diff from git history" })
+	-- -- stylua: ignore end
 
 	-- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
 	vim.keymap.set("n", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next search result" })
@@ -77,10 +77,13 @@ if not in_vscode then
   map("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
   map("n", "gD", vim.lsp.buf.declaration, { desc = "Goto Declaration" })
   map("n", "gK", vim.lsp.buf.signature_help, { desc = "Signature Help" })
-  map("n", "gr", ":Telescope lsp_references<cr>", { desc = "Goto References" })
-  map("n", "gI", function() require("telescope.builtin").lsp_implementations({ reuse_win = true }) end, { desc = "Goto Implementation" })
-  map("n", "gd", function() require("telescope.builtin").lsp_definitions({ reuse_win = true }) end, { desc = "Goto Definition" })
-  map("n", "gy", function() require("telescope.builtin").lsp_type_definitions({ reuse_win = true }) end, { desc = "Goto Type Definition" })
+  map("n", "gr", ":FzfLua lsp_references<cr>", { desc = "Goto References" })
+  -- map("n", "gI", function() require("telescope.builtin").lsp_implementations({ reuse_win = true }) end, { desc = "Goto Implementation" })
+  -- map("n", "gd", function() require("telescope.builtin").lsp_definitions({ reuse_win = true }) end, { desc = "Goto Definition" })
+  -- map("n", "gy", function() require("telescope.builtin").lsp_type_definitions({ reuse_win = true }) end, { desc = "Goto Type Definition" })
+  map("n", "gI", "<cmd>FzfLua lsp_implementations<CR>", { desc = "Goto Implementation" })
+  map("n", "gd", "<cmd>FzfLua lsp_definitions<CR>", { desc = "Goto Definition" })
+  map("n", "gy","<cmd>FzfLua lsp_typedefs", { desc = "Goto Type Definition" })
 	-- stylua: ignore end
 
 	-- -- floating terminal
