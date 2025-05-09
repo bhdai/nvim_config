@@ -72,18 +72,18 @@ return {
 				end
 
         -- stylua: ignore start
-        keymap("n", "gd", function() vim.lsp.buf.definition() end, "Go to definition")
+        -- keymap("n", "gd", function() vim.lsp.buf.definition() end, "Go to definition")
         keymap("n", "K", function() vim.lsp.buf.hover() end, "Hover")
         keymap("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, "Workspace symbol")
         keymap("n", "<leader>vd", function() vim.diagnostic.open_float() end, "Float diagnostic")
         keymap("n", "<leader>ca", function() vim.lsp.buf.code_action() end, "Code action")
         keymap("n", "<leader>cr", function() vim.lsp.buf.rename() end, "Rename variable")
         keymap("i", "<C-k>", function() vim.lsp.buf.signature_help() end, "Signature help")
-        keymap("n", "[d", function() vim.diagnostic.goto_prev() end, "Go to previous diagnostic message")
-        keymap("n", "]d", function() vim.diagnostic.goto_next() end, "Go to next diagnostic message")
+        keymap("n", "[d", function() vim.diagnostic.jump({count = -1, float = true}) end, "Go to previous diagnostic message")
+        keymap("n", "]d", function() vim.diagnostic.jump({count = 1, float = true}) end, "Go to next diagnostic message")
 				-- stylua: ignore end
 
-				if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+				if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
 					vim.lsp.inlay_hint.enable(true, { env.buf })
 					keymap("n", "<leader>uh", function()
 						vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = env.buf }))
