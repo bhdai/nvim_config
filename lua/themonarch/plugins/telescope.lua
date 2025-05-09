@@ -1,5 +1,6 @@
 return {
 	"nvim-telescope/telescope.nvim",
+  enabled = false,
 	cmd = "Telescope",
 	dependencies = {
 		"kkharji/sqlite.lua",

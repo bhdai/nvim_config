@@ -1,6 +1,5 @@
 return {
   "mfussenegger/nvim-jdtls",
-  dependencies = { "folke/which-key.nvim" },
   ft = "java",
   config = function ()
     local home = os.getenv('HOME')
@@ -59,15 +58,6 @@ return {
     -- if the current buffer is already a Java file, attach immediately.
     if vim.bo.filetype == "java" then
       start_jdtls()
-    end
-
-    -- set up some key mappings using which-key if installed.
-    local wk_status, wk = pcall(require, "which-key")
-    if wk_status then
-      wk.register({
-        ["<leader>co"] = { jdtls.organize_imports, "Organize Imports" },
-        ["<leader>cxv"] = { jdtls.extract_variable_all, "Extract Variable" },
-      }, { buffer = 0 })
     end
   end
 }
