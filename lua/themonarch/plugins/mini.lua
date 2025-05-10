@@ -65,13 +65,13 @@ return {
 		opts = {
 			highlight_duration = 500,
 			mappings = {
-        add = "gza", -- Add surrounding in Normal and Visual modes
-        delete = "gzd", -- Delete surrounding
-        find = "gzf", -- Find surrounding (to the right)
-        find_left = "gzF", -- Find surrounding (to the left)
-        highlight = "gzh", -- Highlight surrounding
-        replace = "gzr", -- Replace surrounding
-        update_n_lines = "gzn", -- Update `n_lines`
+				add = "gza", -- Add surrounding in Normal and Visual modes
+				delete = "gzd", -- Delete surrounding
+				find = "gzf", -- Find surrounding (to the right)
+				find_left = "gzF", -- Find surrounding (to the left)
+				highlight = "gzh", -- Highlight surrounding
+				replace = "gzr", -- Replace surrounding
+				update_n_lines = "gzn", -- Update `n_lines`
 			},
 			silent = true,
 		},
@@ -95,17 +95,5 @@ return {
 			end
 		end,
 	},
-	{
-		"echasnovski/mini.comment",
-		event = "VeryLazy",
-		dependencies = {
-			{
-				"folke/ts-comments.nvim",
-				opts = {},
-				event = "VeryLazy",
-				enabled = vim.fn.has("nvim-0.10.0") == 1,
-			},
-		},
-		opts = {},
-	},
 }
+

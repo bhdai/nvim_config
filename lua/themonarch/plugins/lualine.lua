@@ -72,15 +72,6 @@ return {
 						icon = "󰓩",
 						color = utils.get_hlgroup("Special", nil),
 					},
-					{
-						function()
-							return require("nvim-navic").get_location()
-						end,
-						cond = function()
-							return package.loaded["nvim-navic"] and require("nvim-navic").is_available()
-						end,
-						color = utils.get_hlgroup("Comment", nil),
-					},
 				},
 				lualine_x = {
 					{

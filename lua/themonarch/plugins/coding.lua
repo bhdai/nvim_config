@@ -1,54 +1,5 @@
 return {
 	{
-		"stevearc/aerial.nvim",
-		enabled = false,
-		-- Optional dependencies
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter",
-			"nvim-tree/nvim-web-devicons",
-		},
-		opts = function()
-			local icons = require("core.icons")
-			local aerial_icons = vim.deepcopy(icons.kinds)
-
-			aerial_icons.lua = { Package = aerial_icons.Control }
-			local filter_kind = false
-			if icons.kind_filter then
-				filter_kind = assert(vim.deepcopy(icons.kind_filter))
-				filter_kind._ = filter_kind.default
-				filter_kind.default = nil
-			end
-
-			local opts = {
-				attach_mode = "global",
-				backends = { "lsp", "treesitter", "markdown", "man" },
-				show_guides = true,
-				layout = {
-					resize_to_content = false,
-					win_opts = {
-						winhl = "Normal:NormalFloat,FloatBorder:NormalFloat,SignColumn:SignColumnSB",
-						signcolumn = "yes",
-						statuscolumn = " ",
-					},
-				},
-				icons = aerial_icons,
-				filter_kind = filter_kind,
-        -- stylua: ignore
-        guides = {
-          mid_item   = "├╴",
-          last_item  = "└╴",
-          nested_top = "│ ",
-          whitespace = "  ",
-        },
-			}
-
-			return opts
-		end,
-		keys = {
-			{ "<leader>cs", "<cmd>AerialToggle<cr>", desc = "Aerial (Symbols)" },
-		},
-	},
-	{
 		"mfussenegger/nvim-lint",
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" }, -- equivalent to LazyFile event
 		opts = {
@@ -129,23 +80,6 @@ return {
 		end,
 	},
 	{
-		"smiteshp/nvim-navic",
-		config = function()
-			require("nvim-navic").setup({
-				lsp = {
-					auto_attach = true,
-					-- priority order for attaching LSP servers
-					-- to the current buffer
-					preference = {
-						"html",
-						"templ",
-					},
-				},
-				separator = " 󰁔 ",
-			})
-		end,
-	},
-	{
 		"nvimtools/none-ls.nvim",
 		dependencies = { "mason.nvim" },
 		opts = function(_, opts)
@@ -161,4 +95,15 @@ return {
 			})
 		end,
 	},
+	{
+		"folke/ts-comments.nvim",
+		opts = {},
+		event = "VeryLazy",
+		enabled = vim.fn.has("nvim-0.10.0") == 1,
+	},
+  {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    opts = {},
+  }
 }
