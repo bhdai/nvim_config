@@ -6,6 +6,7 @@ return {
 			"mfussenegger/nvim-dap",
 			"mfussenegger/nvim-dap-python", --optional
 		},
+    ft = { "python" },
 		lazy = false,
 		branch = "regexp",
 		opts = {
@@ -28,6 +29,7 @@ return {
 	},
 	{
 		"Vigemus/iron.nvim",
+    ft = { "python" },
 		-- command = {"Iron", "IronRepl", "IronFocus", "IronHide", "IronStop" },
 		config = function()
 			local iron = require("iron.core")
