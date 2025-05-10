@@ -1,8 +1,8 @@
 return {
 	"neovim/nvim-lspconfig",
 	dependencies = {
-		"williamboman/mason.nvim",
-		"williamboman/mason-lspconfig.nvim",
+		{"williamboman/mason.nvim", version = "1.11.0"},
+		{"williamboman/mason-lspconfig.nvim", version = "1.32.0"},
 		-- "hrsh7th/cmp-nvim-lsp", -- for autocompletion
 		"j-hui/fidget.nvim", -- lsp process notification
 		"saghen/blink.cmp",
@@ -128,7 +128,7 @@ return {
 				"clangd",
 				"pyright",
 				"lua_ls",
-				"ts_ls",
+        "sqlls",
         "jdtls",
 			},
 
