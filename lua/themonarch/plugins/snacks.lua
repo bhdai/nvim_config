@@ -7,7 +7,7 @@ return {
 	opts = {
 		gitbrowse = {
 			open = function(url)
-				vim.fn.system("~/ghq/github.com/buidai123/dotfiles/config/hypr/scripts/quake")
+				vim.fn.system("~/ghq/github.com/bhdai/dotfiles/config/hypr/scripts/quake")
 				vim.ui.open(url)
 			end,
 		},
