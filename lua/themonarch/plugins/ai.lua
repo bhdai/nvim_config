@@ -6,7 +6,7 @@ return {
 		event = "BufReadPost",
 		opts = {
 			suggestion = {
-				enabled = true,
+				enabled = false,
 				auto_trigger = true,
 				hide_during_completion = false,
 				keymap = {
@@ -16,7 +16,7 @@ return {
 					dismiss = "<C-]>",
 				},
 			},
-      copilot_model = "gpt-4o-copilot",
+			copilot_model = "gpt-4o-copilot",
 			panel = { enabled = false },
 			-- filetypes = { ["*"] = true },
 			filetypes = {
@@ -40,9 +40,10 @@ return {
 	},
 	{
 		"CopilotC-Nvim/CopilotChat.nvim",
+    enabled = false,
 		dependencies = {
 			-- { "github/copilot.vim" },
-      { "zbirenbaum/copilot.lua" },
+			{ "zbirenbaum/copilot.lua" },
 			{ "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
 		},
 		build = "make tiktoken", -- Only on MacOS or Linux
