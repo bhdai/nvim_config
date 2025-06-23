@@ -142,48 +142,6 @@ function M.diff_file_from_history(commit, file_path)
 	M.diff_file(temp_file_path)
 end
 
---- Open a telescope picker to select a file to diff against the current buffer
---- @param recent? boolean If true, open the recent files picker
-function M.telescope_diff_file(recent)
-	local picker = require("telescope.builtin").find_files
-	if recent then
-		picker = require("telescope.builtin").oldfiles
-	end
-
-	picker({
-		prompt_title = "Select File to Compare",
-		attach_mappings = function(prompt_bufnr)
-			local actions = require("telescope.actions")
-			local action_state = require("telescope.actions.state")
-
-			actions.select_default:replace(function()
-				actions.close(prompt_bufnr)
-				local selection = action_state.get_selected_entry()
-				M.diff_file(selection.value)
-			end)
-			return true
-		end,
-	})
-end
-
---- Open a telescope picker to select a commit to diff against the current buffer
-function M.telescope_diff_from_history()
-	local current_file = vim.fn.fnamemodify(vim.fn.expand("%:p"), ":~:."):gsub("\\", "/")
-	require("telescope.builtin").git_commits({
-		git_command = { "git", "log", "--pretty=oneline", "--abbrev-commit", "--follow", "--", current_file },
-		attach_mappings = function(prompt_bufnr)
-			local actions = require("telescope.actions")
-			local action_state = require("telescope.actions.state")
-
-			actions.select_default:replace(function()
-				actions.close(prompt_bufnr)
-				local selection = action_state.get_selected_entry()
-				M.diff_file_from_history(selection.value, current_file)
-			end)
-			return true
-		end,
-	})
-end
 
 --- Run current file inside toggleterm
 function M.run_shell_script()

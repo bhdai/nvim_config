@@ -23,7 +23,6 @@ vim.g.maplocalleader = "\\"
 
 require("lazy").setup({
 	-- "nvim-lua/plenary.nvim",
-	-- "nvim-telescope/telescpe.nvim",
 	spec = {
 		{ import = "themonarch.plugins" },
 		{ "wakatime/vim-wakatime", lazy = false },
