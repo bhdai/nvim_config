@@ -10,5 +10,9 @@ return{
   },
   config = function()
     vim.cmd.colorscheme("tokyonight")
+
+    vim.api.nvim_set_hl(0, 'LineNr', { fg = "#565f89" })
+    vim.api.nvim_set_hl(0, 'LineNrAbove', { fg = "#565f89" })
+    vim.api.nvim_set_hl(0, 'LineNrBelow', { fg = "#565f89" })
   end,
 }
