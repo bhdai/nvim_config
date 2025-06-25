@@ -142,7 +142,6 @@ function M.diff_file_from_history(commit, file_path)
 	M.diff_file(temp_file_path)
 end
 
-
 --- Run current file inside toggleterm
 function M.run_shell_script()
 	local script = vim.fn.expand("%:p")
@@ -228,7 +227,7 @@ function M.get_root()
 	---@type string[]
 	local roots = {}
 	if path then
-		for _, client in pairs(vim.lsp.get_active_clients({ bufnr = 0 })) do
+		for _, client in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
 			local workspace = client.config.workspace_folders
 			local paths = workspace
 					and vim.tbl_map(function(ws)
