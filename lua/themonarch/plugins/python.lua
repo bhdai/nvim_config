@@ -3,11 +3,8 @@ return {
 		"linux-cultist/venv-selector.nvim",
 		dependencies = {
 			"neovim/nvim-lspconfig",
-			"mfussenegger/nvim-dap",
-			"mfussenegger/nvim-dap-python", --optional
 		},
-    ft = { "python" },
-		lazy = false,
+		ft = "python",
 		branch = "regexp",
 		opts = {
 			settings = {
