@@ -220,51 +220,82 @@ function M.wezterm()
 	})
 end
 
-function M.get_root()
-	---@type string?
+function M.get_root(opts)
+	opts = opts or {}
+	-- define the order of detectors
+	opts.detectors = opts.detectors or { "lsp", "pattern" }
+	opts.patterns = opts.patterns or { ".git", "lua" }
+
 	local path = vim.api.nvim_buf_get_name(0)
 	path = path ~= "" and vim.loop.fs_realpath(path) or nil
-	---@type string[]
-	local roots = {}
-	if path then
-		for _, client in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
-			local workspace = client.config.workspace_folders
-			local paths = workspace
-					and vim.tbl_map(function(ws)
-						return vim.uri_to_fname(ws.uri)
-					end, workspace)
-				or client.config.root_dir and { client.config.root_dir }
-				or {}
-			for _, p in ipairs(paths) do
-				local r = vim.loop.fs_realpath(p)
-				if path:find(r, 1, true) then
-					roots[#roots + 1] = r
+
+	for _, detector in ipairs(opts.detectors) do
+		if detector == "lsp" and path then
+			local roots = {}
+			for _, client in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
+				local workspace = client.config.workspace_folders
+				local paths = workspace
+						and vim.tbl_map(function(ws)
+							return vim.uri_to_fname(ws.uri)
+						end, workspace)
+					or client.config.root_dir and { client.config.root_dir }
+					or {}
+				for _, p in ipairs(paths) do
+					local r = vim.loop.fs_realpath(p)
+					if path:find(r, 1, true) then
+						roots[#roots + 1] = r
+					end
 				end
 			end
+			if #roots > 0 then
+				table.sort(roots, function(a, b)
+					return #a > #b
+				end)
+				return roots[1]
+			end
+		elseif detector == "pattern" then
+			local search_path = path and vim.fs.dirname(path) or vim.loop.cwd()
+			local found_marker = vim.fs.find(opts.patterns, { path = search_path, upward = true })[1]
+			if found_marker then
+				return vim.fs.dirname(found_marker)
+			end
+		elseif detector == "cwd" then
+			return vim.loop.cwd()
 		end
 	end
-	table.sort(roots, function(a, b)
-		return #a > #b
-	end)
-	---@type string?
-	local root = roots[1]
-	if not root then
-		path = path and vim.fs.dirname(path) or vim.loop.cwd()
-		---@type string?
-		root = vim.fs.find({ ".git", "lua" }, { path = path, upward = true })[1]
-		root = root and vim.fs.dirname(root) or vim.loop.cwd()
-	end
-	---@cast root string
-	return root
+	return nil
 end
 
 -- Function to open fzf
 function M.open_fzf(opts)
 	opts = opts or {}
 	local fzf_opts = {
-		cwd = opts.cwd or M.get_root(),
+		cwd = opts.cwd or M.get_root({ detectors = { "lsp", "pattern", "cwd" } }),
 	}
 	require("fzf-lua").files(fzf_opts)
+end
+
+-- Function to get visual selection
+function M.get_visual_selection()
+	local mode = vim.api.nvim_get_mode().mode
+	if mode ~= "v" and mode ~= "V" and mode ~= "\22" then
+		return ""
+	end
+
+	local selection = vim.fn.getreg("v")
+	if selection == "" then
+		return ""
+	end
+
+	-- Remove any leading or trailing whitespace
+	selection = selection:gsub("^%s+", ""):gsub("%s+$", "")
+
+	-- If the selection is a single line, trim the line ending
+	if not selection:find("\n") then
+		selection = selection:gsub("[\r\n]+", "")
+	end
+
+	return selection
 end
 
 -- Wrapper function to create keymappings
