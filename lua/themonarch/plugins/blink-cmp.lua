@@ -39,6 +39,7 @@ return {
 			-- 	use_nvim_cmp_as_default = false,
 			-- },
 			completion = {
+        list = { selection = { preselect = false, auto_insert = true } },
 				accept = {
 					auto_brackets = { enabled = true },
 				},
@@ -75,9 +76,22 @@ return {
 				["<S-Tab>"] = { "snippet_backward", "fallback" },
 			},
 
+      cmdline = {
+        eanabled = true,
+        completion = {
+          menu = { auto_show = true},
+          list = { selection = {preselect=false, auto_insert=true}},
+        },
+        keymap = {
+          ["<Tab>"] = { "select_next", "fallback" },
+          ["<S-Tab>"] = { "select_prev", "fallback" },
+          ["<C-e>"] = { "cancel", "fallback" },
+          ["<C-y>"] = { "select_and_accept" },
+        }
+      },
+
 			sources = {
 				default = { "lsp", "path", "snippets", "copilot", "buffer", "lazydev" },
-				-- cmdline = {},
 				per_filetype = {
 					sql = { "snippets", "dadbod", "buffer" },
 				},
