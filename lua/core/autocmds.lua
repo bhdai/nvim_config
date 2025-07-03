@@ -76,7 +76,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 	end,
 })
 
--- Auto create dir when saving a file, in case some intermediate directory does not exist
+-- auto create dir when saving a file, in case some intermediate directory does not exist
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 	group = augroup("auto_create_dir", { clear = true }),
 	callback = function(event)
@@ -88,7 +88,7 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 	end,
 })
 
--- only hsow cursorline in active window
+-- only show cursorline in active window
 local cursorline_group = augroup("cursor_line", { clear = true })
 autocmd({ "InsertLeave", "WinEnter" }, {
   group = cursorline_group,
