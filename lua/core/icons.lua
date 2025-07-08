@@ -16,9 +16,9 @@ M.diagnostics = {
 }
 
 M.git = {
-	added = " ",
-	modified = " ",
-	removed = " ",
+	added = " ",
+	modified = " ",
+	removed = " ",
 }
 
 M.kinds = {
