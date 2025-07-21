@@ -32,7 +32,7 @@ autocmd("BufEnter", {
 })
 
 autocmd("BufEnter", {
-	pattern = { "*.md", "*.txt" },
+	pattern = { "*.md", "*.txt", "*.qmd" },
 	callback = function()
 		vim.opt_local.spell = true
 	end,
@@ -91,20 +91,20 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 -- only show cursorline in active window
 local cursorline_group = augroup("cursor_line", { clear = true })
 autocmd({ "InsertLeave", "WinEnter" }, {
-  group = cursorline_group,
-  callback = function()
-    if vim.w.auto_cursorline then
-      vim.wo.cursorline = true
-      vim.w.auto_cursorline = nil
-    end
-  end,
+	group = cursorline_group,
+	callback = function()
+		if vim.w.auto_cursorline then
+			vim.wo.cursorline = true
+			vim.w.auto_cursorline = nil
+		end
+	end,
 })
 autocmd({ "InsertEnter", "WinLeave" }, {
-  group = cursorline_group,
-  callback = function()
-    if vim.wo.cursorline then
-      vim.w.auto_cursorline = true
-      vim.wo.cursorline = false
-    end
-  end,
+	group = cursorline_group,
+	callback = function()
+		if vim.wo.cursorline then
+			vim.w.auto_cursorline = true
+			vim.wo.cursorline = false
+		end
+	end,
 })
