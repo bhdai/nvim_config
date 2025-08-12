@@ -88,9 +88,6 @@ if not in_vscode then
 	-- map("n", "<c-/>", lazyterm, { desc = "Terminal (Root Dir)" })
 	-- map("n", "<c-_>", lazyterm, { desc = "which_key_ignore" })
 
-	-- neo_tree
-	map("n", "<leader>R", ":Neotree focus<CR>")
-
 	-- enable/disable render-markdown
 	map("n", "<leader>um", ":RenderMarkdown toggle<CR>")
 
@@ -146,9 +143,6 @@ map("n", "<leader>d", '"_d')
 map("n", "<leader>D", '"_D')
 map("v", "<leader>d", '"_d')
 map("v", "<leader>D", '"_D')
-
--- select all
-map("n", "<C-a>", "gg<S-v>G")
 
 -- change word with <c-c>
 map({ "n", "x" }, "<C-c>", "<cmd>normal! ciw<cr>a")
