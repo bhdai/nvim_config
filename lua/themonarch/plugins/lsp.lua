@@ -1,5 +1,6 @@
 return {
 	"neovim/nvim-lspconfig",
+	-- event = "VeryLazy",
 	dependencies = {
 		{ "williamboman/mason.nvim" },
 		{ "williamboman/mason-lspconfig.nvim" },
@@ -26,6 +27,33 @@ return {
 			handlers = {
 				function(server_name)
 					require("lspconfig")[server_name].setup({
+						capabilities = capabilities,
+					})
+				end,
+				-- Custom PyRight configuration
+				pyright = function()
+					local my_python_lsp = vim.g.my_python_lsp or "pyright"
+					if my_python_lsp ~= "pyright" then
+						return -- don't setup if not chosen
+					end
+					
+					require("lspconfig").pyright.setup({
+						capabilities = capabilities,
+						settings = {
+							python = {
+								analysis = {
+									typeCheckingMode = "basic",
+									autoSearchPaths = true,
+									useLibraryCodeForTypes = true,
+									diagnosticMode = "openFilesOnly",
+								},
+							},
+						},
+					})
+				end,
+				-- Custom Ruff configuration
+				ruff = function()
+					require("lspconfig").ruff.setup({
 						capabilities = capabilities,
 					})
 				end,
