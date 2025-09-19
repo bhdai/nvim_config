@@ -1,7 +1,7 @@
 return {
 	"neovim/nvim-lspconfig",
 	-- event = "VeryLazy",
-  event = { "BufReadPre", "BufNewFile" },
+	event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
 		{ "williamboman/mason.nvim" },
 		{ "williamboman/mason-lspconfig.nvim" },
@@ -57,13 +57,6 @@ return {
         keymap("n", "[d", function() vim.diagnostic.jump({count = -1, float = true}) end, "Go to previous diagnostic message")
         keymap("n", "]d", function() vim.diagnostic.jump({count = 1, float = true}) end, "Go to next diagnostic message")
 				-- stylua: ignore end
-
-				if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-					vim.lsp.inlay_hint.enable(true, { env.buf })
-					keymap("n", "<leader>uh", function()
-						vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = env.buf }))
-					end, "Toggle inlay hints")
-				end
 			end,
 		})
 
