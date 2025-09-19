@@ -1,18 +1,15 @@
-return{
-  "folke/tokyonight.nvim",
-  priority = 1000,
-  opts = {
-    transparent = true,
-    styles = {
-      sidebars = "transparent",
-      floats = "transparent",
-    },
-  },
-  config = function()
-    vim.cmd.colorscheme("tokyonight")
-
-    vim.api.nvim_set_hl(0, 'LineNr', { fg = "#565f89" })
-    vim.api.nvim_set_hl(0, 'LineNrAbove', { fg = "#565f89" })
-    vim.api.nvim_set_hl(0, 'LineNrBelow', { fg = "#565f89" })
-  end,
+return {
+	"folke/tokyonight.nvim",
+	lazy = true,
+	priority = 1000,
+	opts = {
+		on_highlights = function(hl, c)
+			hl.LineNr = { fg = "#565f89" }
+			hl.LineNrAbove = { fg = "#565f89" }
+			hl.LineNrBelow = { fg = "#565f89" }
+		end,
+	},
+	init = function()
+		vim.cmd.colorscheme("tokyonight")
+	end,
 }
