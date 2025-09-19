@@ -24,38 +24,15 @@ return {
 		})
 		require("mason-lspconfig").setup({
 			ensure_installed = { "lua_ls" },
+			automatic_enable = true, -- uses vim.lsp.enable() automatically
 			handlers = {
 				function(server_name)
-					require("lspconfig")[server_name].setup({
-						capabilities = capabilities,
-					})
-				end,
-				-- Custom PyRight configuration
-				pyright = function()
-					local my_python_lsp = vim.g.my_python_lsp or "pyright"
-					if my_python_lsp ~= "pyright" then
-						return -- don't setup if not chosen
+					-- skip lua_ls as it's configured separately in after/lsp/lua_ls.lua
+					if server_name ~= "lua_ls" then
+						vim.lsp.config[server_name] = {
+							capabilities = capabilities,
+						}
 					end
-					
-					require("lspconfig").pyright.setup({
-						capabilities = capabilities,
-						settings = {
-							python = {
-								analysis = {
-									typeCheckingMode = "basic",
-									autoSearchPaths = true,
-									useLibraryCodeForTypes = true,
-									diagnosticMode = "openFilesOnly",
-								},
-							},
-						},
-					})
-				end,
-				-- Custom Ruff configuration
-				ruff = function()
-					require("lspconfig").ruff.setup({
-						capabilities = capabilities,
-					})
 				end,
 			},
 		})

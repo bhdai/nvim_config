@@ -1,4 +1,5 @@
-require("lspconfig").lua_ls.setup({
+-- note: capabilities are set by mason-lspconfig's automatic_enable
+vim.lsp.config.lua_ls = {
   settings = {
     Lua = {
       workspace = {
@@ -26,4 +27,6 @@ require("lspconfig").lua_ls.setup({
       },
     }
   }
-})
+}
+
+-- enable is handled automatically by mason-lspconfig's automatic_enable = true
