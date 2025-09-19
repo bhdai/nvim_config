@@ -1,6 +1,7 @@
 return {
 	{
 		"MeanderingProgrammer/render-markdown.nvim",
+		ft = { "markdown", "norg", "rmd", "org", "codecompanion" },
 		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
 		opts = {
 			file_types = { "markdown", "norg", "rmd", "org" },
@@ -26,7 +27,6 @@ return {
 	},
 	{
 		"iamcco/markdown-preview.nvim",
-		enabled = true,
 		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
 		build = function()
 			require("lazy").load({ plugins = { "markdown-preview.nvim" } })
