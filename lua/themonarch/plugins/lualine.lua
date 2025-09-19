@@ -1,6 +1,7 @@
 return {
 	"nvim-lualine/lualine.nvim",
-	dependencies = { "echasnovski/mini.icons" },
+	event = "VeryLazy",
+	dependencies = { "nvim-tree/nvim-web-devicons" },
 	opts = function()
 		local utils = require("core.utils.general")
 		local icons = require("core.icons")

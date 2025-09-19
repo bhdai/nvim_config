@@ -5,7 +5,6 @@ return {
 			"neovim/nvim-lspconfig",
 		},
 		ft = "python",
-		branch = "regexp",
 		opts = {
 			settings = {
 				options = {
