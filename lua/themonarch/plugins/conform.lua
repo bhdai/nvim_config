@@ -1,41 +1,100 @@
 return {
 	"stevearc/conform.nvim",
-	event = { "VeryLazy", "BufWritePre" },
+	event = { "BufWritePre", "BufNewFile" },
 	cmd = { "ConformInfo" },
-	opts = {
-		formatters_by_ft = {
-			javascript = { "dprint", "prettier" },
-			typescript = { "dprint", "prettier" },
-			javascriptreact = { "dprint", "prettier" },
-			typescriptreact = { "dprint", "prettier" },
-			css = { "prettierd", "prettier" },
-			scss = { "prettier" },
-			html = { "djlint", "prettierd", "prettier" },
-			templ = { "djlint", "templ" },
-			json = { "prettierd", "prettier" },
-			jsonc = { "prettierd", "prettier" },
-			rasi = { "prettierd", "prettier" },
-			toml = { "taplo" },
-			yaml = { "prettierd", "prettier" },
-			fish = { "fish_indent" },
-			markdown = { "prettierd", "prettier", "injected" },
-			lua = { "stylua" },
-			sh = { "beautysh", "shfmt" },
-			python = { "isort", "ruff" },
-			["_"] = { "trim_whitespace", "trim_newlines" },
-			["*"] = { "codespell" },
+	keys = {
+		{
+			"<leader>cf",
+			function()
+				require("conform").format({ async = true })
+			end,
+			mode = { "n", "v" },
+			desc = "Format buffer",
 		},
+		{
+			"<leader>cF",
+			function()
+				require("conform").format({ formatters = { "injected" }, timeout_ms = 3000 })
+			end,
+			mode = { "n", "v" },
+			desc = "Format Injected Langs",
+		},
+	},
+	opts = {
+		-- Default format options
+		default_format_opts = {
+			timeout_ms = 3000,
+			async = false, -- Not recommended to change
+			quiet = false, -- Set to true to suppress notifications
+			lsp_format = "fallback", -- Use LSP formatting as fallback
+		},
+
+		-- Map of filetype to formatters
+		formatters_by_ft = {
+			lua = { "stylua" },
+			fish = { "fish_indent" },
+			sh = { "shfmt" },
+			bash = { "shfmt" },
+			python = function(bufnr)
+				if require("conform").get_formatter_info("ruff_format", bufnr).available then
+					return { "ruff_format" }
+				else
+					return { "isort", "black" }
+				end
+			end,
+		},
+
+		-- Customize formatters
 		formatters = {
 			shfmt = {
 				prepend_args = { "-i", "2" },
 			},
-			-- Dealing with old version of prettierd that doesn't support range formatting
-			prettierd = {
-				range_args = false,
+			-- Example of using dprint when available
+			dprint = {
+				condition = function(self, ctx)
+					return vim.fs.find({ "dprint.json" }, { path = ctx.filename, upward = true })[1]
+				end,
+			},
+			-- Make codespell more reliable and only run on text files
+			codespell = {
+				condition = function(self, ctx)
+					-- Only run on text-like files, not binary files
+					local textlike_fts = {
+						"text",
+						"markdown",
+						"gitcommit",
+						"NeogitCommitMessage",
+						"rst",
+						"asciidoc",
+						"latex",
+						"tex",
+						"mail",
+					}
+					return vim.tbl_contains(textlike_fts, vim.bo[ctx.buf].filetype)
+				end,
 			},
 		},
-		log_level = vim.log.levels.TRACE,
-		format_after_save = { timeout_ms = 500, lsp_fallback = true, async = true, quiet = true },
+
+		-- Set this to change the default values when calling conform.format()
+		-- This will also affect the default values for format_on_save/format_after_save
+		format_on_save = {
+			-- These options will be passed to conform.format()
+			timeout_ms = 500,
+			lsp_format = "fallback",
+		},
+		-- If this is set, Conform will run the formatter asynchronously after save.
+		-- It will pass the table to conform.format().
+		-- This can also be a function that returns the table.
+		format_after_save = {
+			lsp_format = "fallback",
+		},
+
+		-- Set the log level. Use `:ConformInfo` to see the location of the log file.
+		log_level = vim.log.levels.ERROR,
+		-- Conform will notify you when a formatter errors
+		notify_on_error = true,
+		-- Conform will notify you when no formatters are available for the buffer
+		notify_no_formatters = true,
 	},
 	config = function(_, opts)
 		local conform = require("conform")
