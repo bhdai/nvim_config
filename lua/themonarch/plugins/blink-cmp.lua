@@ -8,7 +8,8 @@ return {
 			"sources.default",
 		},
 		dependencies = {
-			"L3MON4D3/LuaSnip",
+			-- "L3MON4D3/LuaSnip",
+			"rafamadriz/friendly-snippets",
 			{
 				"saghen/blink.compat",
 				opts = {},
