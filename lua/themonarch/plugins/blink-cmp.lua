@@ -26,7 +26,7 @@ return {
 			},
 			{ "giuxtaposition/blink-cmp-copilot" },
 		},
-		event = "InsertEnter",
+		event = { "InsertEnter", "CmdlineEnter" },
 
 		---@module 'blink.cmp'
 		---@type blink.cmp.Config
@@ -34,13 +34,16 @@ return {
 			appearance = {
 				use_nvim_cmp_as_default = false,
 				nerd_font_variant = "mono",
+				kind_icons = vim.tbl_extend("keep", {
+					Color = "██", -- Use block instead of icon for color items to make swatches more usable
+				}, require("core.icons").kinds),
 			},
 
 			-- highlight = {
 			-- 	use_nvim_cmp_as_default = false,
 			-- },
 			completion = {
-        list = { selection = { preselect = false, auto_insert = true } },
+				list = { selection = { preselect = false, auto_insert = true } },
 				accept = {
 					auto_brackets = { enabled = true },
 				},
@@ -77,24 +80,25 @@ return {
 				["<S-Tab>"] = { "snippet_backward", "fallback" },
 			},
 
-      cmdline = {
-        eanabled = true,
-        completion = {
-          menu = { auto_show = true},
-          list = { selection = {preselect=false, auto_insert=true}},
-        },
-        keymap = {
-          ["<Tab>"] = { "select_next", "fallback" },
-          ["<S-Tab>"] = { "select_prev", "fallback" },
-          ["<C-e>"] = { "cancel", "fallback" },
-          ["<C-y>"] = { "select_and_accept" },
-        }
-      },
+			cmdline = {
+				eanabled = true,
+				completion = {
+					menu = {
+						auto_show = function(ctx)
+							return vim.fn.getcmdtype() == ":"
+						end,
+					},
+					ghost_text = { enabled = true },
+					list = { selection = { preselect = false } },
+				},
+				keymap = { preset = "cmdline" },
+			},
 
 			sources = {
 				default = { "lsp", "path", "snippets", "copilot", "buffer", "lazydev" },
 				per_filetype = {
 					sql = { "snippets", "dadbod", "buffer" },
+					lua = { inherit_defaults = true, "lazydev" },
 				},
 				providers = {
 					-- dont show LuaLS require statements when lazydev has items
@@ -111,14 +115,5 @@ return {
 				},
 			},
 		},
-	},
-	{
-		"saghen/blink.cmp",
-		opts = function(_, opts)
-			opts.appearance = opts.appearance or {}
-			opts.appearance.kind_icons = vim.tbl_extend("keep", {
-				Color = "██", -- Use block instead of icon for color items to make swatches more usable
-			}, require("core.icons").kinds)
-		end,
 	},
 }
