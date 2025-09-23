@@ -25,7 +25,7 @@ return {
 	},
 	{
 		"Vigemus/iron.nvim",
-    ft = { "python" },
+		ft = { "python" },
 		-- command = {"Iron", "IronRepl", "IronFocus", "IronHide", "IronStop" },
 		config = function()
 			local iron = require("iron.core")
@@ -60,7 +60,7 @@ return {
 					-- How the repl window will be displayed
 					-- See below for more information
 					-- repl_open_cmd = view.bottom(40),
-          repl_open_cmd = "vertical botright 80 split"
+					repl_open_cmd = "vertical botright 80 split",
 
 					-- repl_open_cmd can also be an array-style table so that multiple
 					-- repl_open_commands can be given.

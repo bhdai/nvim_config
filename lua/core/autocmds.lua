@@ -1,9 +1,5 @@
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
-local utils = require("core.utils.general")
-
--- General Settings
-local general = augroup("General Settings", { clear = true })
 
 autocmd("TextYankPost", {
 	desc = "Hight light when yanking text",
@@ -17,45 +13,8 @@ autocmd("BufEnter", {
 	callback = function()
 		vim.opt.formatoptions:remove({ "c", "r", "o" })
 	end,
-	group = general,
+	group = augroup("disable_newline_comment", { clear = true }),
 	desc = "Disable New Line Comment",
-})
-
-autocmd("BufEnter", {
-	callback = function(opts)
-		if vim.bo[opts.buf].filetype == "bicep" then
-			vim.bo.commentstring = "// %s"
-		end
-	end,
-	group = general,
-	desc = "Set Bicep Comment String",
-})
-
-autocmd("BufEnter", {
-	pattern = { "*.md", "*.txt", "*.qmd" },
-	callback = function()
-		vim.opt_local.spell = true
-	end,
-	group = general,
-	desc = "Enable spell checking on specific filetypes",
-})
-
-autocmd("FileType", {
-	group = general,
-	pattern = {
-		"grug-far",
-		"help",
-		"checkhealth",
-		"copilot-chat",
-	},
-	callback = function(event)
-		vim.bo[event.buf].buflisted = false
-		vim.keymap.set("n", "q", "<cmd>close<cr>", {
-			buffer = event.buf,
-			silent = true,
-			desc = "Quit buffer",
-		})
-	end,
 })
 
 -- go to last loc when opening a buffer
@@ -85,26 +44,5 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 		end
 		local file = vim.uv.fs_realpath(event.match) or event.match
 		vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
-	end,
-})
-
--- only show cursorline in active window
-local cursorline_group = augroup("cursor_line", { clear = true })
-autocmd({ "InsertLeave", "WinEnter" }, {
-	group = cursorline_group,
-	callback = function()
-		if vim.w.auto_cursorline then
-			vim.wo.cursorline = true
-			vim.w.auto_cursorline = nil
-		end
-	end,
-})
-autocmd({ "InsertEnter", "WinLeave" }, {
-	group = cursorline_group,
-	callback = function()
-		if vim.wo.cursorline then
-			vim.w.auto_cursorline = true
-			vim.wo.cursorline = false
-		end
 	end,
 })

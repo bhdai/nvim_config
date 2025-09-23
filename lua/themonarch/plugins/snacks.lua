@@ -23,7 +23,7 @@ return {
     quickfile = { enabled = true },
     scope = { enabled = false },
     statuscolumn = { enabled = true },
-    words = { enabled = true },
+    words = { enabled = false },
     styles = {
       notification = {
         wo = { wrap = true } -- Wrap notifications
