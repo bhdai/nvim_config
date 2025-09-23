@@ -9,67 +9,67 @@ return {
 		"Saghen/blink.cmp",
 	},
 	config = function()
-		local capabilities = require("blink.cmp").get_lsp_capabilities()
-
 		require("fidget").setup({})
+
 		require("mason").setup({
 			ui = {
 				width = 0.8,
 				height = 0.8,
-				icons = {
-					package_installed = "",
-					package_uninstalled = "",
-					package_pending = "󱍷",
-				},
 			},
 		})
+
+		-- configure global LSP capabilities for all servers
+		-- this will be inherited by all servers unless overridden
+		vim.lsp.config("*", {
+			capabilities = require("blink.cmp").get_lsp_capabilities(),
+		})
+
 		require("mason-lspconfig").setup({
 			ensure_installed = { "lua_ls" },
-			automatic_enable = true, -- uses vim.lsp.enable() automatically
-			handlers = {
-				function(server_name)
-					-- skip lua_ls as it's configured separately in after/lsp/lua_ls.lua
-					if server_name ~= "lua_ls" then
-						vim.lsp.config[server_name] = {
-							capabilities = capabilities,
-						}
-					end
-				end,
-			},
+			automatic_enable = true, -- automatically enables servers using vim.lsp.enable()
 		})
 
 		vim.api.nvim_create_autocmd("LspAttach", {
-			group = vim.api.nvim_create_augroup("LSPGroup", { clear = true }),
-			callback = function(env)
-				local client = vim.lsp.get_client_by_id(env.data.client_id)
-				local keymap = function(mode, keys, func, desc)
-					vim.keymap.set(mode, keys, func, { buffer = env.buf, desc = "LSP: " .. desc })
+			group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
+			callback = function(args)
+				local client = vim.lsp.get_client_by_id(args.data.client_id)
+				local bufnr = args.buf
+
+				local function map(mode, lhs, rhs, desc)
+					vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = "LSP: " .. desc })
 				end
 
-        -- stylua: ignore start
-        -- keymap("n", "gd", function() vim.lsp.buf.definition() end, "Go to definition")
-        keymap("n", "K", function() vim.lsp.buf.hover() end, "Hover")
-        keymap("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, "Workspace symbol")
-        keymap("n", "<leader>vd", function() vim.diagnostic.open_float() end, "Float diagnostic")
-        keymap("n", "<leader>ca", function() vim.lsp.buf.code_action() end, "Code action")
-        keymap("n", "<leader>cr", function() vim.lsp.buf.rename() end, "Rename variable")
-        keymap("i", "<C-k>", function() vim.lsp.buf.signature_help() end, "Signature help")
-        keymap("n", "[d", function() vim.diagnostic.jump({count = -1, float = true}) end, "Go to previous diagnostic message")
-        keymap("n", "]d", function() vim.diagnostic.jump({count = 1, float = true}) end, "Go to next diagnostic message")
-				-- stylua: ignore end
+				-- custom keymaps
+				map("n", "K", vim.lsp.buf.hover, "Hover Documentation")
+				map("n", "<leader>vws", vim.lsp.buf.workspace_symbol, "Workspace Symbol")
+				map("n", "<leader>vd", vim.diagnostic.open_float, "Show Diagnostic")
+				map("n", "[d", function()
+					vim.diagnostic.jump({ count = -1, float = true })
+				end, "Previous Diagnostic")
+				map("n", "]d", function()
+					vim.diagnostic.jump({ count = 1, float = true })
+				end, "Next Diagnostic")
+				map("n", "gI", "<cmd>FzfLua lsp_implementations<CR>", "Goto Implementation")
+
+				-- document highlighting
+				if client:supports_method("textDocument/documentHighlight") then
+					local highlight_group = vim.api.nvim_create_augroup("LspDocumentHighlight", { clear = false })
+					vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+						group = highlight_group,
+						buffer = bufnr,
+						callback = vim.lsp.buf.document_highlight,
+					})
+					vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+						group = highlight_group,
+						buffer = bufnr,
+						callback = vim.lsp.buf.clear_references,
+					})
+				end
 			end,
 		})
 
+		-- diagnostics display
 		local icons = require("core.icons").diagnostics
-		local diagnostic_icon = function(diagnostic)
-			for severity, icon in pairs(icons) do
-				if diagnostic.severity == vim.diagnostic.severity[severity:upper()] then
-					return icon
-				end
-			end
-			return "●" -- fallback icon
-		end
-
 		vim.diagnostic.config({
 			signs = {
 				text = {
@@ -82,17 +82,22 @@ return {
 			virtual_text = {
 				spacing = 4,
 				source = "if_many",
-				prefix = vim.fn.has("nvim-0.10.0") == 0 and "●" or diagnostic_icon,
+				prefix = function(diagnostic)
+					for severity, icon in pairs(icons) do
+						if diagnostic.severity == vim.diagnostic.severity[severity:upper()] then
+							return icon
+						end
+					end
+					return "●"
+				end,
 			},
 			update_in_insert = false,
 			underline = true,
 			severity_sort = true,
 			float = {
-				focusable = true,
-				style = "minimal",
 				border = "none",
-				source = true,
-				header = "",
+				source = "if_many",
+				header = "Diagnostics:",
 				prefix = "",
 			},
 		})
