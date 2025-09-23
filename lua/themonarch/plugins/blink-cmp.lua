@@ -1,4 +1,5 @@
 return {
+	-- Core blink.cmp configuration
 	{
 		"saghen/blink.cmp",
 		version = "1.*",
@@ -8,21 +9,11 @@ return {
 			"sources.default",
 		},
 		dependencies = {
-			-- "L3MON4D3/LuaSnip",
 			"rafamadriz/friendly-snippets",
 			{
 				"saghen/blink.compat",
 				opts = {},
 				version = "*",
-			},
-			{
-				"folke/lazydev.nvim",
-				ft = "lua", -- only load on lua files
-				opts = {
-					library = {
-						{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
-					},
-				},
 			},
 			{ "giuxtaposition/blink-cmp-copilot" },
 		},
@@ -81,7 +72,7 @@ return {
 			},
 
 			cmdline = {
-				eanabled = true,
+				enabled = true,
 				completion = {
 					menu = {
 						auto_show = function(ctx)
@@ -96,14 +87,9 @@ return {
 
 			sources = {
 				default = { "lsp", "path", "snippets", "copilot", "buffer", "lazydev" },
-				per_filetype = {
-					sql = { "snippets", "dadbod", "buffer" },
-					lua = { inherit_defaults = true, "lazydev" },
-				},
 				providers = {
 					-- dont show LuaLS require statements when lazydev has items
 					lsp = { fallbacks = { "lazydev" } },
-					lazydev = { name = "LazyDev", module = "lazydev.integrations.blink" },
 					copilot = {
 						name = "copilot",
 						module = "blink-cmp-copilot",
@@ -111,7 +97,35 @@ return {
 						score_offset = 100,
 						async = true,
 					},
-					dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
+				},
+			},
+		},
+	},
+
+	{
+		"folke/lazydev.nvim",
+		ft = "lua", -- only load on lua files
+		opts = {
+			library = {
+				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+			},
+		},
+	},
+
+	-- add lazydev source to blink.cmp for Lua files
+	{
+		"saghen/blink.cmp",
+		opts = {
+			sources = {
+				per_filetype = {
+					lua = { inherit_defaults = true, "lazydev" },
+				},
+				providers = {
+					lazydev = {
+						name = "LazyDev",
+						module = "lazydev.integrations.blink",
+						score_offset = 100, -- show at a higher priority than lsp
+					},
 				},
 			},
 		},
