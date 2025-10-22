@@ -1,16 +1,10 @@
 return {
 	"stevearc/conform.nvim",
+	dependencies = { "mason.nvim" },
+	lazy = true,
 	event = { "BufWritePre", "BufNewFile" },
 	cmd = { "ConformInfo" },
 	keys = {
-		{
-			"<leader>cf",
-			function()
-				require("conform").format({ async = true })
-			end,
-			mode = { "n", "v" },
-			desc = "Format buffer",
-		},
 		{
 			"<leader>cF",
 			function()
@@ -46,10 +40,6 @@ return {
 
 		-- Customize formatters
 		formatters = {
-			shfmt = {
-				prepend_args = { "-i", "2" },
-			},
-			-- Example of using dprint when available
 			dprint = {
 				condition = function(self, ctx)
 					return vim.fs.find({ "dprint.json" }, { path = ctx.filename, upward = true })[1]
