@@ -9,6 +9,11 @@ return {
 			return root_dir and vim.fs.basename(root_dir) or "default"
 		end
 
+		local function get_jvm_path(ver)
+			local p = vim.fn.system("archlinux-java status | grep java-" .. ver .. " | awk '{print $1}'"):gsub("\n", "")
+			return "/usr/lib/jvm/" .. p
+		end
+
 		local function get_jdtls_config_dir(project_name)
 			return vim.fn.stdpath("cache") .. "/jdtls/" .. project_name .. "/config"
 		end
@@ -36,8 +41,38 @@ return {
 			local root_dir = get_root_dir(fname)
 			local project_name = get_project_name(root_dir)
 
-			-- Build the command for starting jdtls
-			local cmd = { vim.fn.exepath("jdtls") }
+			local java_25 = get_jvm_path("25") .. "/bin/java"
+
+			-- find the actual launcher jar
+			local jar_pattern =
+				vim.fn.expand("$HOME/.local/share/nvim/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_*.jar")
+			local launcher_path = vim.fn.glob(jar_pattern)
+			if launcher_path == "" then
+				vim.notify("JDTLS launcher jar not found", vim.log.levels.ERROR)
+				return
+			end
+
+			local cmd = {
+				java_25,
+				"-Declipse.application=org.eclipse.jdt.ls.core.id1",
+				"-Dosgi.bundles.defaultStartLevel=4",
+				"-Declipse.product=org.eclipse.jdt.ls.core.product",
+				"-Dlog.protocol=true",
+				"-Dlog.level=ALL",
+				"-Xms1g",
+				"--add-modules=ALL-SYSTEM",
+				"--add-opens",
+				"java.base/java.util=ALL-UNNAMED",
+				"--add-opens",
+				"java.base/java.lang=ALL-UNNAMED",
+				"-jar",
+				launcher_path,
+				"-configuration",
+				vim.fn.expand("$HOME/.local/share/nvim/mason/packages/jdtls/config_linux"),
+				"-data",
+				get_jdtls_workspace_dir(project_name),
+			}
+
 			if cmd[1] == "" then
 				vim.notify("jdtls not found in PATH", vim.log.levels.ERROR)
 				return
@@ -51,14 +86,6 @@ return {
 					table.insert(cmd, string.format("--jvm-arg=-javaagent:%s", lombok_jar))
 				end
 			end
-
-			-- Add configuration and workspace directories
-			vim.list_extend(cmd, {
-				"-configuration",
-				get_jdtls_config_dir(project_name),
-				"-data",
-				get_jdtls_workspace_dir(project_name),
-			})
 
 			-- Get blink.cmp capabilities if available
 			local capabilities = nil
