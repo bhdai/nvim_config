@@ -12,7 +12,8 @@ return {
 		require("oil").setup({
 			columns = { "icons" },
 			keymaps = {
-				["< C-h >"] = false,
+				["<C-h>"] = false,
+				["<C-l>"] = false,
 			},
 			view_options = {
 				show_hidden = true,
