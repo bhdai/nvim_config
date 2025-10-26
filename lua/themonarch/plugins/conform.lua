@@ -67,17 +67,28 @@ return {
 
 		-- Set this to change the default values when calling conform.format()
 		-- This will also affect the default values for format_on_save/format_after_save
-		format_on_save = {
-			-- These options will be passed to conform.format()
-			timeout_ms = 500,
-			lsp_format = "fallback",
-		},
+		format_on_save = function(bufnr)
+			-- Don't format if the global variable is set
+			if vim.g.disable_autoformat then
+				return
+			end
+			return {
+				timeout_ms = 500,
+				lsp_format = "fallback",
+			}
+		end,
 		-- If this is set, Conform will run the formatter asynchronously after save.
 		-- It will pass the table to conform.format().
 		-- This can also be a function that returns the table.
-		format_after_save = {
-			lsp_format = "fallback",
-		},
+		format_after_save = function(bufnr)
+			-- Don't format if the global variable is set
+			if vim.g.disable_autoformat then
+				return
+			end
+			return {
+				lsp_format = "fallback",
+			}
+		end,
 
 		-- Set the log level. Use `:ConformInfo` to see the location of the log file.
 		log_level = vim.log.levels.ERROR,
