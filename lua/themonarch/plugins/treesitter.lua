@@ -180,4 +180,9 @@ return {
 			return { mode = "cursor", max_lines = 3 }
 		end,
 	},
+	{
+		"windwp/nvim-ts-autotag",
+		ft = { "html", "xml", "jsx" },
+		opts = {},
+	},
 }
