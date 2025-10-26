@@ -98,11 +98,16 @@ if not in_vscode then
 	map("n", "[t", function()
 		require("todo-comments").jump_prev()
 	end, { desc = "Previous todo comment" })
+
+	map("n", "<leader>bb", "<C-^>", { desc = "Switch to other buffer" })
 else
 	-- this will run if you ARE in Vscode
 end
 
 -- Keybinding that should work both in vscode and regular neovim
+
+map({ "v", "n" }, "zd", '"_d', { desc = "Delete without copying" })
+map({ "v", "n" }, "zD", '"_D', { desc = "Delete without copying" })
 
 --exit insert mode you can enable it if you want here i comment it out cuz i prefer to map the esc key to CapsLook key using powertoy
 -- map("n", "jk", "<ESC>")
