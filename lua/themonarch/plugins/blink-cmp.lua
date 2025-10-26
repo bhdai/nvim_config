@@ -54,9 +54,9 @@ return {
 				},
 			},
 
-			-- signature = {
-			-- 	enabled = false,
-			-- },
+			snippets = {
+				preset = "luasnip",
+			},
 
 			keymap = {
 				["<Tab>"] = {

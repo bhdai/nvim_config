@@ -90,4 +90,46 @@ return {
 		event = "InsertEnter",
 		opts = {},
 	},
+	{
+		"L3MON4D3/LuaSnip",
+		version = "v2.*",
+		build = "make install_jsregexp",
+		dependencies = {
+			{
+				"rafamadriz/friendly-snippets",
+				config = function()
+					require("luasnip.loaders.from_vscode").lazy_load()
+					require("luasnip.loaders.from_vscode").lazy_load({
+						paths = { vim.fn.stdpath("config") .. "/snippets" },
+					})
+				end,
+			},
+		},
+		opts = {
+			history = true,
+			delete_check_events = "TextChanged",
+		},
+	},
+	{
+		"danymat/neogen",
+		cmd = "Neogen",
+		keys = {
+			{
+				"<leader>cn",
+				function()
+					require("neogen").generate()
+				end,
+				desc = "Generate Annotations (Neogen)",
+			},
+		},
+		opts = function(_, opts)
+			if opts.snippet_engine ~= nil then
+				return
+			end
+
+			if vim.snippet then
+				opts.snippet_engine = "nvim"
+			end
+		end,
+	},
 }
