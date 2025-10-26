@@ -25,6 +25,7 @@ return {
 	},
 	{
 		"Vigemus/iron.nvim",
+		enabled = false,
 		ft = { "python" },
 		-- command = {"Iron", "IronRepl", "IronFocus", "IronHide", "IronStop" },
 		config = function()

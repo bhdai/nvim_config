@@ -71,7 +71,7 @@ if not in_vscode then
   map("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
   map("n", "gD", vim.lsp.buf.declaration, { desc = "Goto Declaration" })
   map("n", "gK", vim.lsp.buf.signature_help, { desc = "Signature Help" })
-  map("n", "gr", ":FzfLua lsp_references<cr>", { desc = "Goto References" })
+  -- map("n", "gr", ":FzfLua lsp_references<cr>", { desc = "Goto References" })
   map("n", "gI", "<cmd>FzfLua lsp_implementations<CR>", { desc = "Goto Implementation" })
   map("n", "gd", "<cmd>FzfLua lsp_definitions<CR>", { desc = "Goto Definition" })
   map("n", "gy","<cmd>FzfLua lsp_typedefs", { desc = "Goto Type Definition" })
