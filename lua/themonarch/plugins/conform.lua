@@ -13,6 +13,19 @@ return {
 			mode = { "n", "v" },
 			desc = "Format Injected Langs",
 		},
+
+		{
+			"<leader>wf",
+			function()
+				require("conform").format({
+					lsp_fallback = true, -- use LSP formatting if no formatters
+					async = true, -- formatting asynchronously
+				}, function()
+					print("Formatting completed!")
+				end)
+			end,
+			desc = "formatting with all",
+		},
 	},
 	opts = {
 		-- Default format options
@@ -29,13 +42,8 @@ return {
 			fish = { "fish_indent" },
 			sh = { "shfmt" },
 			bash = { "shfmt" },
-			python = function(bufnr)
-				if require("conform").get_formatter_info("ruff_format", bufnr).available then
-					return { "ruff_format" }
-				else
-					return { "isort", "black" }
-				end
-			end,
+			python = { "ruff_format" },
+			["_"] = { "trim_whitespace" },
 		},
 
 		-- Customize formatters
@@ -65,30 +73,11 @@ return {
 			},
 		},
 
-		-- Set this to change the default values when calling conform.format()
-		-- This will also affect the default values for format_on_save/format_after_save
-		format_on_save = function(bufnr)
-			-- Don't format if the global variable is set
-			if vim.g.disable_autoformat then
-				return
-			end
-			return {
-				timeout_ms = 500,
-				lsp_format = "fallback",
-			}
-		end,
-		-- If this is set, Conform will run the formatter asynchronously after save.
-		-- It will pass the table to conform.format().
-		-- This can also be a function that returns the table.
-		format_after_save = function(bufnr)
-			-- Don't format if the global variable is set
-			if vim.g.disable_autoformat then
-				return
-			end
-			return {
-				lsp_format = "fallback",
-			}
-		end,
+		format_on_save = {
+			-- These options will be passed to conform.format()
+			timeout_ms = 500,
+			lsp_format = "fallback",
+		},
 
 		-- Set the log level. Use `:ConformInfo` to see the location of the log file.
 		log_level = vim.log.levels.ERROR,
@@ -103,13 +92,5 @@ return {
 		conform.setup(opts)
 
 		vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
-
-		-- Toggle format on save
-		vim.api.nvim_create_user_command("ConformToggle", function()
-			vim.g.disable_autoformat = not vim.g.disable_autoformat
-			print("Conform " .. (vim.g.disable_autoformat and "disabled" or "enabled"))
-		end, {
-			desc = "Toggle format on save",
-		})
 	end,
 }
