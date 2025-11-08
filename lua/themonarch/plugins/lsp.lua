@@ -52,12 +52,18 @@ return {
 				map("n", "gI", "<cmd>FzfLua lsp_implementations<CR>", "Goto Implementation")
 
 				-- document highlighting
-				if client:supports_method("textDocument/documentHighlight") then
+				-- Only set up document highlighting if the capability is not explicitly disabled
+				if client and client.server_capabilities.documentHighlightProvider ~= false then
 					local highlight_group = vim.api.nvim_create_augroup("LspDocumentHighlight", { clear = false })
 					vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
 						group = highlight_group,
 						buffer = bufnr,
-						callback = vim.lsp.buf.document_highlight,
+						callback = function()
+							-- Double-check that the method is supported before calling
+							if client:supports_method("textDocument/documentHighlight") then
+								vim.lsp.buf.document_highlight()
+							end
+						end,
 					})
 					vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
 						group = highlight_group,
