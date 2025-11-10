@@ -39,10 +39,13 @@ return {
 					vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = "LSP: " .. desc })
 				end
 
+        -- stylua: ignore start
 				-- custom keymaps
 				map("n", "K", vim.lsp.buf.hover, "Hover Documentation")
 				map("n", "<leader>vws", vim.lsp.buf.workspace_symbol, "Workspace Symbol")
 				map("n", "<leader>vd", vim.diagnostic.open_float, "Show Diagnostic")
+        map("n", "gK", function() return vim.lsp.buf.signature_help() end, "Signature Help" )
+        map("i", "<c-k>", function() return vim.lsp.buf.signature_help() end, "Signature Help" )
 				map("n", "[d", function()
 					vim.diagnostic.jump({ count = -1, float = true })
 				end, "Previous Diagnostic")
@@ -50,6 +53,7 @@ return {
 					vim.diagnostic.jump({ count = 1, float = true })
 				end, "Next Diagnostic")
 				map("n", "gI", "<cmd>FzfLua lsp_implementations<CR>", "Goto Implementation")
+				-- stylua: ignore end
 
 				-- document highlighting
 				-- Only set up document highlighting if the capability is not explicitly disabled
