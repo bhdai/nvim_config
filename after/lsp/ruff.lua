@@ -15,6 +15,7 @@ vim.lsp.config("ruff", {
 		client.server_capabilities.documentFormattingProvider = false -- enable vim.lsp.buf.format()
 		client.server_capabilities.documentRangeFormattingProvider = false -- formatting will be used by confirm.nvim
 		client.server_capabilities.hoverProvider = false -- use basedpyrigt
+		client.server_capabilities.diagnosticProvider = false -- use basedpyright for diagnostics
 	end,
 	init_options = {
 		settings = {
@@ -29,7 +30,7 @@ vim.lsp.config("ruff", {
 				preview = false,
 			},
 			lint = {
-				enable = true,
+				enable = false, -- disable diagnostics, use basedpyright instead
 			},
 		},
 	},
