@@ -59,13 +59,25 @@ return {
 				-- Only set up document highlighting if the capability is not explicitly disabled
 				if client and client.server_capabilities.documentHighlightProvider ~= false then
 					local highlight_group = vim.api.nvim_create_augroup("LspDocumentHighlight", { clear = false })
+					-- Clear highlight autocmds when LSP client detaches to avoid calling methods with no active clients
+					vim.api.nvim_create_autocmd("LspDetach", {
+						group = highlight_group,
+						buffer = bufnr,
+						callback = function()
+							vim.api.nvim_clear_autocmds({ group = highlight_group, buffer = bufnr })
+							vim.lsp.buf.clear_references()
+						end,
+					})
 					vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
 						group = highlight_group,
 						buffer = bufnr,
 						callback = function()
-							-- Double-check that the method is supported before calling
-							if client:supports_method("textDocument/documentHighlight") then
-								vim.lsp.buf.document_highlight()
+							-- Only call when at least one active client in this buffer supports the method
+							for _, c in ipairs(vim.lsp.get_clients({ bufnr = bufnr })) do
+								if c:supports_method("textDocument/documentHighlight") then
+									vim.lsp.buf.document_highlight()
+									break
+								end
 							end
 						end,
 					})
