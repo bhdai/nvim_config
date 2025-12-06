@@ -42,7 +42,7 @@ return {
 			fish = { "fish_indent" },
 			sh = { "shfmt" },
 			bash = { "shfmt" },
-			python = { "ruff_format" },
+			python = { "ruff_organize_imports", "ruff_format" },
 			["_"] = { "trim_whitespace" },
 		},
 
