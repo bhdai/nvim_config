@@ -16,7 +16,7 @@ return {
 					dismiss = "<C-]>",
 				},
 			},
-			copilot_model = "gpt-4o-copilot",
+			copilot_model = "", -- use default model
 			panel = { enabled = false },
 			-- filetypes = { ["*"] = true },
 			filetypes = {
