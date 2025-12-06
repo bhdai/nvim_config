@@ -17,6 +17,7 @@ vim.lsp.config("pyrefly", {
 		client.server_capabilities.inlayHintProvider = false -- basedpyright has more kinds
 		client.server_capabilities.referenceProvider = false -- basedpyright has more kinds
 		client.server_capabilities.signatureHelpProvider = false -- basedpyright has more kinds
+		client.handlers["textDocument/publishDiagnostics"] = function() end
 	end,
 	settings = {},
 })

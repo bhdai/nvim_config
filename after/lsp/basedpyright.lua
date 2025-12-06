@@ -1,16 +1,6 @@
-local root_dir_basedpyright = function(bufnr, cb)
-	local root = vim.fs.root(bufnr, {
-		"pyproject.toml",
-		"pyrightconfig.json",
-		".git",
-	}) or vim.fn.expand("%:p:h")
-	cb(root)
-end
-
 vim.lsp.config("basedpyright", {
 	cmd = { "basedpyright-langserver", "--stdio" },
 	filetypes = { "python" },
-	root_dir = root_dir_basedpyright,
 	on_attach = function(client, _)
 		client.server_capabilities.completionProvider = false -- use pyrefly for fast response
 		client.server_capabilities.definitionProvider = false -- use pyrefly for fast response
@@ -24,8 +14,10 @@ vim.lsp.config("basedpyright", {
 			analysis = {
 				autoImportCompletions = true,
 				autoSearchPaths = true, -- auto serach command paths like 'src'
-				diagnosticMode = "openFilesOnly",
 				useLibraryCodeForTypes = true,
+				diagnosticSeverityOverrides = {
+					reportAny = false,
+				},
 			},
 		},
 	},
