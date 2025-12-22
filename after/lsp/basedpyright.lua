@@ -16,7 +16,7 @@ vim.lsp.config("basedpyright", {
 				autoSearchPaths = true, -- auto serach command paths like 'src'
 				useLibraryCodeForTypes = true,
 				diagnosticSeverityOverrides = {
-					reportAny = false,
+					reportAny = "none",
 				},
 			},
 		},
