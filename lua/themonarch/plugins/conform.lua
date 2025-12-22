@@ -43,6 +43,7 @@ return {
 			sh = { "shfmt" },
 			bash = { "shfmt" },
 			python = { "ruff_organize_imports", "ruff_format" },
+			json = { "prettier" },
 			["_"] = { "trim_whitespace" },
 		},
 

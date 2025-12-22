@@ -25,8 +25,6 @@ vim.api.nvim_create_autocmd("User", {
 		vim.keymap.set("n", "<leader>P", "<cmd>Find<cr>")
 		vim.keymap.set("n", "<leader>/", [[<cmd>lua require('vscode').action('workbench.action.findInFiles')<cr>]])
 		vim.keymap.set("n", "<leader>ss", [[<cmd>lua require('vscode').action('workbench.action.gotoSymbol')<cr>]])
-		vim.keymap.set("v", "<leader><space>", [[<cmd>lua require('vscode').action('whichkey.show')<cr>]])
-		vim.keymap.set("n", "<leader><space>", [[<cmd>lua require('vscode').action('whichkey.show')<cr>]])
 
 		-- sync undo/redo with vscode
 		vim.keymap.set("n", "u", [[<cmd>lua require('vscode').action('undo')<cr>]])
@@ -60,9 +58,5 @@ return {
 		opts = {
 			highlight = { enable = false },
 		},
-	},
-	{
-		"sphamba/smear-cursor.nvim",
-		enabled = false,
 	},
 }
