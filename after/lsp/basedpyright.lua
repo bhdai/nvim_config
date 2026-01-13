@@ -1,6 +1,7 @@
-vim.lsp.config("basedpyright", {
+return {
 	cmd = { "basedpyright-langserver", "--stdio" },
 	filetypes = { "python" },
+	root_markers = { "pyproject.toml", ".git" },
 	on_attach = function(client, _)
 		client.server_capabilities.completionProvider = false -- use pyrefly for fast response
 		client.server_capabilities.definitionProvider = false -- use pyrefly for fast response
@@ -21,4 +22,4 @@ vim.lsp.config("basedpyright", {
 			},
 		},
 	},
-})
+}

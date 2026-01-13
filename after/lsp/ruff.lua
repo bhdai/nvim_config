@@ -1,15 +1,7 @@
-vim.lsp.config("ruff", {
+return {
 	cmd = { "ruff", "server" },
 	filetypes = { "python" },
-	root_dir = function(bufnr, cb)
-		local root = vim.fs.root(bufnr, {
-			"pyproject.toml",
-			"ruff.toml",
-			".ruff.toml",
-			".git",
-		}) or vim.fn.expand("%:p:h")
-		cb(root)
-	end,
+	root_markers = { "pyproject.toml", "ruff.toml", ".ruff.toml", ".git" },
 	on_attach = function(client, _)
 		-- lsp use ruff to formatter
 		client.server_capabilities.documentFormattingProvider = false -- enable vim.lsp.buf.format()
@@ -35,4 +27,4 @@ vim.lsp.config("ruff", {
 		},
 	},
 	single_file_support = false,
-})
+}

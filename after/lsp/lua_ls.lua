@@ -1,5 +1,5 @@
 -- note: capabilities are set by mason-lspconfig's automatic_enable
-vim.lsp.config.lua_ls = {
+return {
 	settings = {
 		Lua = {
 			workspace = {

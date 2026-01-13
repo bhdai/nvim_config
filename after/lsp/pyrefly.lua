@@ -1,15 +1,7 @@
-local root_dir_pyrefly = function(bufnr, cb)
-	local root = vim.fs.root(bufnr, {
-		"pyproject.toml",
-		"pyrefly.toml",
-		".git",
-	}) or vim.fn.expand("%:p:h")
-	cb(root)
-end
-vim.lsp.config("pyrefly", {
+return {
 	cmd = { "pyrefly", "lsp" },
 	filetypes = { "python" },
-	root_dir = root_dir_pyrefly,
+	root_markers = { "pyproject.toml", "pyrefly.toml", ".git" },
 	on_attach = function(client, _)
 		client.server_capabilities.codeActionProvider = false -- basedpyright has more kinds
 		client.server_capabilities.documentSymbolProvider = false -- basedpyright has more kinds
@@ -20,4 +12,4 @@ vim.lsp.config("pyrefly", {
 		client.handlers["textDocument/publishDiagnostics"] = function() end
 	end,
 	settings = {},
-})
+}
