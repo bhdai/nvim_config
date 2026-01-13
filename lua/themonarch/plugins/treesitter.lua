@@ -5,7 +5,6 @@ return {
 		version = false, -- Don't pin to releases (they're outdated)
 		lazy = false, -- Main branch does NOT support lazy-loading
 		build = ":TSUpdate",
-		event = { "BufReadPost", "BufNewFile" },
 		cmd = { "TSUpdate", "TSInstall", "TSLog", "TSUninstall" },
 		opts_extend = { "ensure_installed" },
 		opts = {
@@ -13,12 +12,10 @@ return {
 			-- Defaults to stdpath('data')/site, but we specify it explicitly
 			install_dir = vim.fn.stdpath("data") .. "/site",
 
-			-- Languages to install
-			-- NOTE: In main branch, this doesn't auto-install!
-			-- We handle installation in the config function below
+			-- Languages to install (excluding bundled parsers in Neovim 0.10+)
+			-- Bundled: c, lua, markdown, markdown_inline, vim, vimdoc, query
 			ensure_installed = {
 				"bash",
-				"c",
 				"cmake",
 				"css",
 				"diff",
@@ -31,19 +28,13 @@ return {
 				"jsdoc",
 				"json",
 				"jsonc",
-				"lua",
 				"luadoc",
 				"luap",
-				"markdown",
-				"markdown_inline",
 				"python",
-				"query",
 				"sql",
 				"toml",
 				"tsx",
 				"typescript",
-				"vim",
-				"vimdoc",
 				"yaml",
 			},
 
@@ -105,70 +96,56 @@ return {
 				return
 			end
 
-			-- Setup with minimal config (main branch style)
+			-- Setup with user options
 			TS.setup(opts)
 
-			-- In main branch, ensure_installed doesn't auto-install
-			-- We must explicitly call TS.install()
-			-- Defer this to avoid blocking startup
-			vim.schedule(function()
-				-- Helper to check if a parser is actually usable (not just "installed")
-				local function has_parser(lang)
-					local ok = pcall(vim.treesitter.language.add, lang)
-					return ok
-				end
+			-- Helper to check if a query exists for a language
+			local function has_query(lang, query_name)
+				return pcall(vim.treesitter.query.get, lang, query_name)
+			end
 
-				-- Filter to only install parsers that are truly missing
+			-- Manual installation of missing parsers (Main branch specific)
+			vim.schedule(function()
+				local installed = TS.get_installed and TS.get_installed() or {}
+				-- If get_installed isn't available/reliable, we fallback to checking usage, but getting the list is best.
+				
 				local to_install = vim.tbl_filter(function(lang)
-					return not has_parser(lang)
+					return not vim.tbl_contains(installed, lang)
 				end, opts.ensure_installed or {})
 
 				if #to_install > 0 then
-					-- Silent installation - only notify on errors
+					-- Install missing parsers
 					TS.install(to_install, { summary = false })
 				end
 			end)
 
-			-- Main branch delegates features to Neovim core
-			-- We enable them manually per filetype
+			-- Autocmd to enable features (highlight, indent, fold)
 			vim.api.nvim_create_autocmd("FileType", {
 				group = vim.api.nvim_create_augroup("treesitter_features", { clear = true }),
 				callback = function(ev)
 					local ft = ev.match
-					local lang = vim.treesitter.language.get_lang(ft)
-					local buf = ev.buf
+					local lang = vim.treesitter.language.get_lang(ft) or ft
 
-					-- Check if this filetype has treesitter support
-					local has_parser = vim.tbl_contains(TS.get_installed("parsers") or {}, lang or ft)
+					-- Parsers must be installed for features to work
+					local has_parser = pcall(vim.treesitter.language.add, lang)
 					if not has_parser then
 						return
 					end
 
-					-- Helper to check if query exists
-					local function has_query(query_name)
-						local ok, _ = pcall(vim.treesitter.query.get, lang or ft, query_name)
-						return ok
+					-- HIGHLIGHTING
+					if has_query(lang, "highlights") then
+						pcall(vim.treesitter.start, ev.buf)
 					end
 
-					-- HIGHLIGHTING (provided by Neovim core)
-					if has_query("highlights") then
-						local ok = pcall(vim.treesitter.start, buf)
-						if not ok then
-							-- Silently fail if highlighting doesn't work
-							-- (some languages may not have proper queries yet)
-						end
+					-- INDENTATION
+					if has_query(lang, "indents") then
+						vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 					end
 
-					-- INDENTATION (provided by nvim-treesitter)
-					if has_query("indents") then
-						vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-					end
-
-					-- FOLDING (provided by Neovim core)
-					if has_query("folds") then
+					-- FOLDING
+					if has_query(lang, "folds") then
 						vim.wo[0][0].foldmethod = "expr"
 						vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-						-- Set sane folding defaults (start with all folds open)
 						vim.wo[0][0].foldlevel = 99
 					end
 				end,
@@ -181,7 +158,7 @@ return {
 	-- ============================================
 	{
 		"nvim-treesitter/nvim-treesitter-textobjects",
-		branch = "main", -- ✅ Use main branch
+		branch = "main", -- Use main branch
 		event = "VeryLazy",
 		opts = {
 			move = {
