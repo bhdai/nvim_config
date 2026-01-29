@@ -44,6 +44,11 @@ return {
 			bash = { "shfmt" },
 			python = { "ruff_organize_imports", "ruff_format" },
 			json = { "prettier" },
+			javascript = { "prettier" },
+			javascriptreact = { "prettier" },
+			typescript = { "prettier" },
+			typescriptreact = { "prettier" },
+			tsx = { "prettier" },
 			["_"] = { "trim_whitespace" },
 		},
 
