@@ -77,22 +77,19 @@ return {
 								return ""
 							end
 
-							if vim.fn.fnamemodify(file_path, ":p:h") == vim.loop.cwd() then
+							local cwd = vim.uv.cwd()
+							if vim.fn.fnamemodify(file_path, ":p:h") == cwd then
 								return ""
 							end
 
-							local root = utils.get_root({ detectors = { "pattern" } })
-							local file_dir
-							if root then
-								local rel_path = vim.fs.normalize(file_path):gsub(vim.fs.normalize(root), "")
-								if rel_path:sub(1, 1) == "/" then
-									rel_path = rel_path:sub(2)
-								end
-								file_dir = vim.fn.fnamemodify(rel_path, ":h")
-							else
-								file_dir = vim.fn.fnamemodify(file_path, ":.:h")
+							local root = utils.get_root({ detectors = { "pattern" } }) or cwd
+							local rel_path = vim.fs.relpath(root, file_path)
+							if not rel_path then
+								-- file is not under root, fallback to relative from cwd
+								rel_path = vim.fn.fnamemodify(file_path, ":.")
 							end
 
+							local file_dir = vim.fn.fnamemodify(rel_path, ":h")
 							if file_dir == "." or file_dir == "" then
 								return ""
 							end

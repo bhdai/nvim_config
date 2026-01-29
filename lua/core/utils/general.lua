@@ -43,7 +43,7 @@ function M.get_root(opts)
 	opts.patterns = opts.patterns or { ".git", "lua" }
 
 	local path = vim.api.nvim_buf_get_name(0)
-	path = path ~= "" and vim.loop.fs_realpath(path) or nil
+	path = path ~= "" and vim.uv.fs_realpath(path) or nil
 
 	for _, detector in ipairs(opts.detectors) do
 		if detector == "lsp" and path then
@@ -57,7 +57,7 @@ function M.get_root(opts)
 					or client.config.root_dir and { client.config.root_dir }
 					or {}
 				for _, p in ipairs(paths) do
-					local r = vim.loop.fs_realpath(p)
+					local r = vim.uv.fs_realpath(p)
 					if path:find(r, 1, true) then
 						roots[#roots + 1] = r
 					end
@@ -70,13 +70,13 @@ function M.get_root(opts)
 				return roots[1]
 			end
 		elseif detector == "pattern" then
-			local search_path = path and vim.fs.dirname(path) or vim.loop.cwd()
+			local search_path = path and vim.fs.dirname(path) or vim.uv.cwd()
 			local found_marker = vim.fs.find(opts.patterns, { path = search_path, upward = true })[1]
 			if found_marker then
 				return vim.fs.dirname(found_marker)
 			end
 		elseif detector == "cwd" then
-			return vim.loop.cwd()
+			return vim.uv.cwd()
 		end
 	end
 	return nil
