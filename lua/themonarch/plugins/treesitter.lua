@@ -17,6 +17,7 @@ return {
 			ensure_installed = {
 				"bash",
 				"cmake",
+				"cpp",
 				"css",
 				"diff",
 				"gitcommit",
@@ -108,7 +109,7 @@ return {
 			vim.schedule(function()
 				local installed = TS.get_installed and TS.get_installed() or {}
 				-- If get_installed isn't available/reliable, we fallback to checking usage, but getting the list is best.
-				
+
 				local to_install = vim.tbl_filter(function(lang)
 					return not vim.tbl_contains(installed, lang)
 				end, opts.ensure_installed or {})
