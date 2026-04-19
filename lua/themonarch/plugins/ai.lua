@@ -17,10 +17,10 @@ return {
 			},
 			copilot_model = "", -- use default model
 			panel = { enabled = false },
-			-- filetypes = { ["*"] = true },
 			filetypes = {
-				markdown = true,
-				help = true,
+				["*"] = false,
+				markdown = false,
+				help = false,
 			},
 		},
 		config = function(_, opts)
