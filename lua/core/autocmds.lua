@@ -1,6 +1,16 @@
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 
+-- map table for docker compose lsp to detect correct filetype
+vim.filetype.add({
+	filename = {
+		["docker-compose.yml"] = "yaml.docker-compose",
+		["docker-compose.yaml"] = "yaml.docker-compose",
+		["compose.yml"] = "yaml.docker-compose",
+		["compose.yaml"] = "yaml.docker-compose",
+	},
+})
+
 autocmd("TextYankPost", {
 	desc = "Hight light when yanking text",
 	group = augroup("highlight_yank", { clear = true }),
