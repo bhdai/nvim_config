@@ -86,7 +86,7 @@ return {
 			},
 
 			sources = {
-				default = { "lsp", "path", "snippets", "copilot", "buffer", "lazydev" },
+				default = { "lsp", "path", "snippets", "buffer", "lazydev" },
 				providers = {
 					-- dont show LuaLS require statements when lazydev has items
 					lsp = { fallbacks = { "lazydev" } },

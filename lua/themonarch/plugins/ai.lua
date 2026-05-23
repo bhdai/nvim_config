@@ -1,6 +1,7 @@
 return {
 	{
 		"zbirenbaum/copilot.lua",
+		enabled = false,
 		cmd = "Copilot",
 		build = ":Copilot auth",
 		opts = {
@@ -18,9 +19,9 @@ return {
 			copilot_model = "", -- use default model
 			panel = { enabled = false },
 			filetypes = {
-				["*"] = false,
-				markdown = false,
-				help = false,
+				["*"] = true,
+				markdown = true,
+				help = true,
 			},
 		},
 		config = function(_, opts)
