@@ -15,7 +15,7 @@ return {
 				opts = {},
 				version = "*",
 			},
-			{ "giuxtaposition/blink-cmp-copilot" },
+			-- { "giuxtaposition/blink-cmp-copilot" },
 		},
 		event = { "InsertEnter", "CmdlineEnter" },
 
@@ -90,13 +90,13 @@ return {
 				providers = {
 					-- dont show LuaLS require statements when lazydev has items
 					lsp = { fallbacks = { "lazydev" } },
-					copilot = {
-						name = "copilot",
-						module = "blink-cmp-copilot",
-						-- kind = "Copilot",
-						score_offset = 100,
-						async = true,
-					},
+					-- copilot = {
+					-- 	name = "copilot",
+					-- 	module = "blink-cmp-copilot",
+					-- 	-- kind = "Copilot",
+					-- 	score_offset = 100,
+					-- 	async = true,
+					-- },
 				},
 			},
 		},
