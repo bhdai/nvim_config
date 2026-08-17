@@ -18,18 +18,6 @@ function M.get_hlgroup(name, fallback)
 	return fallback or {}
 end
 
---- Get the number of open buffers
---- @return number
-function M.get_buffer_count()
-	local count = 0
-	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-		if vim.fn.bufname(buf) ~= "" then
-			count = count + 1
-		end
-	end
-	return count
-end
-
 --- Parse a given integer color to a hex value.
 --- @param int_color number
 function M.parse_hex(int_color)

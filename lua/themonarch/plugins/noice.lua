@@ -21,12 +21,16 @@ return {
 				-- 	},
 				-- },
 				presets = {
-					bottom_search = true,
-					long_message_to_split = true,
 					lsp_doc_border = false,
 				},
+				-- Nvim forces 'cmdheight' to 0 while a UI is attached with ext_messages
+				-- (:h vim.ui_attach), which leaves the native cmdline with no row to draw
+				-- in. Both have to stay off to keep the stock cmdline visible.
 				cmdline = {
-					view = "cmdline",
+					enabled = false,
+				},
+				messages = {
+					enabled = false,
 				},
 			})
 		end,

@@ -34,7 +34,6 @@ return {
 				lualine_a = {
 					{
 						"mode",
-						icon = "",
 						fmt = function(mode)
 							return mode:lower()
 						end,
@@ -48,16 +47,14 @@ return {
 					{
 						function()
 							local root = utils.get_root({ detectors = { "pattern" } })
-							local name = vim.fn.fnamemodify(root, ":t")
-							-- return " " .. name
-							return "󰂖 " .. name
+							return vim.fn.fnamemodify(root, ":t")
 						end,
 						cond = function()
 							return utils.get_root({ detectors = { "pattern" } }) ~= nil
 						end,
 						color = utils.get_hlgroup("Directory", nil),
 						padding = { left = 0, right = 1 },
-						separator = { right = "" },
+						separator = "",
 					},
 					{
 						"diagnostics",
@@ -118,33 +115,6 @@ return {
 							unnamed = " [No Name]",
 						},
 					},
-					{
-						function()
-							local n = utils.get_buffer_count() - 1
-							return (n > 0 and ("  " .. n) or "")
-						end,
-						cond = function()
-							return utils.get_buffer_count() > 1
-						end,
-						color = utils.get_hlgroup("Operator", nil),
-						padding = { left = 0, right = 0 },
-					},
-					{
-						function()
-							local cur = vim.fn.tabpagenr()
-							local total = vim.fn.tabpagenr("$")
-							return total > 1 and (cur .. "/" .. total) or ""
-						end,
-						cond = function()
-							return vim.fn.tabpagenr("$") > 1
-						end,
-						icon = "",
-						color = function()
-							local total = vim.fn.tabpagenr("$")
-							return total > 5 and utils.get_hlgroup("WarningMsg", nil)
-								or utils.get_hlgroup("Special", nil)
-						end,
-					},
 				},
 				lualine_x = {
 					{
@@ -194,7 +164,7 @@ return {
 							local current_line = vim.fn.line(".")
 							local total_lines = vim.fn.line("$")
 							local percent = math.floor((current_line / total_lines) * 100)
-							return " " .. percent .. "%%"
+							return percent .. "%%"
 						end,
 						padding = { left = 1, right = 0 },
 					},
@@ -202,7 +172,7 @@ return {
 				lualine_z = {
 					{
 						function()
-							return " " .. vim.fn.line(".") .. "|" .. vim.fn.col(".")
+							return vim.fn.line(".") .. "|" .. vim.fn.col(".")
 						end,
 						padding = { left = 1, right = 1 },
 						color = {
